@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AR.js - Vídeo em RA</title>
-    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
-    <script src="https://cdn.rawgit.com/jeromeetienne/AR.js/1.7.2/aframe/build/aframe-ar.js"></script>
+    <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
+    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
     <style>
         body, html {
             margin: 0;
@@ -17,17 +17,19 @@
     </style>
 </head>
 <body>
-    <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false;">
+    <a-scene embedded arjs="patternRatio:0.80" vr-mode-ui="enabled: false">
+        <a-assets>
+             <!-- Definindo o vídeo -->
+             <video id="video" src="./src/files/desafio.mp4" loop="true" style="display:none"></video>
+        </a-assets>
+
         <!-- Definir a câmera com controle AR -->
-        <a-marker preset="custom" type="pattern" url="./src/files/pattern-brad.patt">
+        <a-marker type="pattern" url="./src/files/pattern-brad.patt">
             <!-- O plano onde o vídeo será exibido -->
-            <a-video src="#video" position="0 0.5 0" rotation="-90 0 0" width="1" height="0.6"></a-video>
+            <a-video src="#video" position="0 0.5 0" rotation="-90 0 0" width="1.8" height="3.2"></a-video>
         </a-marker>
 
         <a-entity camera></a-entity>
-
-        <!-- Definindo o vídeo -->
-        <video id="video" src="./src/files/desafio.mp4" loop="true" style="display:none"></video>
     </a-scene>
 
 </body>
