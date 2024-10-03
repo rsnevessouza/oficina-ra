@@ -1,29 +1,16 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
     <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
     <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
 </head>
 <body>
-    <a-scene embedded arjs="patternRatio:0.50" vr-mode-ui="enabled: false">
-        <a-assets>
-             <!-- Definindo o vídeo -->
-             <video id="video" src="./src/files/desafio.mp4"></video>
-        </a-assets>
-
-        <!-- Definir a câmera com controle AR -->
+    <a-scene embedded arjs="patternRatio:0.50">
         <a-marker type="pattern" url="./src/files/pattern-brad.patt">
             <!-- O plano onde o vídeo será exibido -->
-            <a-video src="#video" position="0 0 0" rotation="-90 0 0" width="1.8" height="3.2"></a-video>
+            <a-box position="0 0 0" rotation="0 45 0" color="#4cc3d9"></a-video>
         </a-marker>
-
-        <a-entity camera cursor="fuse: false, rayOrigin: mouse;"></a-entity>
+        <a-entity camera></a-entity>
     </a-scene>
-    <script>
-        window.addEventListener("click", ()=> {
-            const video = document.getElementById("video");
-            video.play();
-        })
-    </script>
 </body>
 </html>
