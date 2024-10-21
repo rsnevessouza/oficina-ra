@@ -5,12 +5,12 @@
     <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
 </head>
 <body>
-    <a-scene embedded arjs="patternRatio:0.50" vr-mode-ui="enabled: false">
+    <a-scene embedded arjs="patternRatio:0.90" vr-mode-ui="enabled: false">
         <a-ssets>
             <video id="video" src="./src/files/desafio.mp4"></video>
             <image id="thumbnail" src="./src/files/thumbnail.jpg"></image>
         </a-ssets>
-        <a-marker type="pattern" url="./src/files/pattern-brad.patt">
+        <a-marker type="pattern" url="./src/files/pattern-qr-code.patt">
             <a-video id="videoId" src="#video" width="1.8" height="3.2" position="0 0 0" rotation="-90 0 0" visible="false"></a-video>
             <a-image id="thumbnailImg" src="#thumbnail" width="1.8" height="3.2" position="0 0 0" rotation="-90 0 0" visible="true"></a-image>
         </a-marker>
