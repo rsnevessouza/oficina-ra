@@ -6,27 +6,37 @@
 </head>
 <body>
     <a-scene embedded arjs="patternRatio:0.90" vr-mode-ui="enabled: false">
-        <a-ssets>
+        <!-- Correção: Tag a-assets -->
+        <a-assets>
             <video id="video" src="./src/files/desafio.mp4"></video>
-            <image id="thumbnail" src="./src/files/thumbnail.jpg"></image>
-        </a-ssets>
+            <img id="thumbnail" src="./src/files/thumbnail.jpg"></img>
+        </a-assets>
+        
+        <!-- Marcador de RA usando QR Code -->
         <a-marker type="pattern" url="./src/files/pattern-qr-code.patt">
+            <!-- Vídeo escondido inicialmente -->
             <a-video id="videoId" src="#video" width="1.8" height="3.2" position="0 0 0" rotation="-90 0 0" visible="false"></a-video>
+            <!-- Miniatura visível inicialmente -->
             <a-image id="thumbnailImg" src="#thumbnail" width="1.8" height="3.2" position="0 0 0" rotation="-90 0 0" visible="true"></a-image>
         </a-marker>
+        
         <a-entity camera cursor="fuse: false; rayOrigin: mouse;"></a-entity>
     </a-scene>
+
     <script>
-        window.addEventListener("click", ()=> {
+        window.addEventListener("click", () => {
             const video = document.getElementById("video");
             const videoId = document.getElementById("videoId");
             const thumbnailImg = document.getElementById("thumbnailImg");
 
-            thumbnailImg.setAttribute("visible",false);
-            videoId.setAttribute("visible",true);
-            
+            // Esconde a miniatura e mostra o vídeo
+            thumbnailImg.setAttribute("visible", false);
+            videoId.setAttribute("visible", true);
+
+            // Garante que o vídeo esteja pronto para reprodução
+            video.load();
             video.play();
-        })
+        });
     </script>
 </body>
 </html>
