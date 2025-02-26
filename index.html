@@ -24,20 +24,23 @@
 
     <script>
         window.addEventListener("click", () => {
-            const video = document.getElementById("video");
-            const videoId = document.getElementById("videoId");
-            const thumbnailImg = document.getElementById("thumbnailImg");
+        const video = document.getElementById("video");
+        const videoId = document.getElementById("videoId");
+        const thumbnailImg = document.getElementById("thumbnailImg");
 
-            // Esconde a miniatura e mostra o vídeo
-            thumbnailImg.setAttribute("visible", false);
-            videoId.setAttribute("visible", true);
-
-            // Garante que o vídeo esteja pronto para reprodução
-            video.load();
-            video.play().catch(error => {
-                console.error("Erro ao reproduzir o vídeo:", error);
-            });
-        });
+        if (video.paused) {
+            // No primeiro clique, esconde a miniatura e mostra o vídeo
+            if (video.currentTime === 0) {
+                thumbnailImg.setAttribute("visible", false);
+                videoId.setAttribute("visible", true);
+            }
+            
+            video.play().catch(error => console.error("Erro ao reproduzir o vídeo:", error));
+        } else {
+            // Se já está tocando, pausa
+            video.pause();
+        }
+    });
     </script>
 </body>
 </html>
