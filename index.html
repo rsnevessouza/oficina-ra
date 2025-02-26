@@ -10,7 +10,7 @@
 <body>
     <a-scene embedded arjs="patternRatio:0.90" vr-mode-ui="enabled: false">
         <a-assets>
-            <video id="video" src="./src/files/desafio.mp4" muted controls playsinline></video>
+            <video id="video" src="./src/files/desafio.mp4" playsinline></video>
             <img id="thumbnail" src="./src/files/thumbnail.jpg">
         </a-assets>
         
@@ -19,11 +19,11 @@
             <a-image id="thumbnailImg" src="#thumbnail" width="1.8" height="3.2" position="0 0 0" rotation="-90 0 0" visible="true"></a-image>
         </a-marker>
         
-        <a-entity camera></a-entity>
+        <a-entity camera cursor="fuse: false; rayOrigin: mouse;"></a-entity>
     </a-scene>
 
     <script>
-        document.querySelector("a-marker").addEventListener("markerFound", () => {
+        window.addEventListener("click", () => {
             const video = document.getElementById("video");
             const videoId = document.getElementById("videoId");
             const thumbnailImg = document.getElementById("thumbnailImg");
@@ -37,17 +37,6 @@
             video.play().catch(error => {
                 console.error("Erro ao reproduzir o vídeo:", error);
             });
-        });
-
-        document.querySelector("a-marker").addEventListener("markerLost", () => {
-            const video = document.getElementById("video");
-            const videoId = document.getElementById("videoId");
-            const thumbnailImg = document.getElementById("thumbnailImg");
-
-            // Pausa o vídeo e volta à miniatura
-            video.pause();
-            thumbnailImg.setAttribute("visible", true);
-            videoId.setAttribute("visible", false);
         });
     </script>
 </body>
