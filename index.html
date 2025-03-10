@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Realidade Aumentada com Vídeo</title>
+    <title>RA Vídeo</title>
     <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
     <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
 </head>
 <body>
     <a-scene embedded arjs="patternRatio:0.90" vr-mode-ui="enabled: false">
         <a-assets>
-            <video id="video" src="./src/files/desafio.mp4" playsinline></video>
-            <img id="thumbnail" src="./src/files/thumbnail.jpg">
+            <video id="video" playsinline></video>
+            <img id="thumbnail" />
         </a-assets>
         
         <a-marker type="pattern" url="./src/files/pattern-qr-code.patt">
@@ -23,21 +23,90 @@
     </a-scene>
 
     <script>
+        // Captura a URL e obtém o parâmetro "pagina"
+        const params = new URLSearchParams(window.location.search);
+        const pagina = params.get("code") || "1"; // Se não houver parâmetro, usa "1"
+        // Mapeamento dos arquivos para cada página
+        const arquivos = {
+            "1": {
+                video: "./src/files/desafio.mp4",
+                thumb: "./src/files/thumbnail.jpg",
+                marcador: "./src/files/pattern-qr-code.patt"
+            },
+            "2": {
+                video: "./src/files/video2.mp4",
+                thumb: "./src/files/thumb2.jpg",
+                marcador: "./src/files/pattern2.patt"
+            },
+            "3": {
+                video: "./src/files/video3.mp4",
+                thumb: "./src/files/thumb3.jpg",
+                marcador: "./src/files/pattern3.patt"
+            },
+            "4": {
+                video: "./src/files/video4.mp4",
+                thumb: "./src/files/thumb4.jpg",
+                marcador: "./src/files/pattern4.patt"
+            },
+            "5": {
+                video: "./src/files/video5.mp4",
+                thumb: "./src/files/thumb5.jpg",
+                marcador: "./src/files/pattern5.patt"
+            },
+            "6": {
+                video: "./src/files/video6.mp4",
+                thumb: "./src/files/thumb6.jpg",
+                marcador: "./src/files/pattern6.patt"
+            },
+            "7": {
+                video: "./src/files/video7.mp4",
+                thumb: "./src/files/thumb7.jpg",
+                marcador: "./src/files/pattern7.patt"
+            },
+            "8": {
+                video: "./src/files/video8.mp4",
+                thumb: "./src/files/thumb8.jpg",
+                marcador: "./src/files/pattern8.patt"
+            },
+            "9": {
+                video: "./src/files/video9.mp4",
+                thumb: "./src/files/thumb9.jpg",
+                marcador: "./src/files/pattern9.patt"
+            },
+            "10": {
+                video: "./src/files/video10.mp4",
+                thumb: "./src/files/thumb10.jpg",
+                marcador: "./src/files/pattern10.patt"
+            }
+        };    
+
+        // Obtém os arquivos correspondentes à página atual
+        const dadosPagina = arquivos[pagina] || arquivos["1"]; // Se não houver, usa a página 1 como fallback
+
+        // Define o vídeo correto
+        document.getElementById("video").src = dadosPagina.video;
+
+        // Define a thumbnail correta
+        document.getElementById("thumbnail").src = dadosPagina.thumb;
+
+        // Define o marcador correto
+        document.getElementById("marker").setAttribute("url", dadosPagina.marcador);
+    
         window.addEventListener("click", () => {
-            const video = document.getElementById("video");
-            const videoId = document.getElementById("videoId");
-            const thumbnailImg = document.getElementById("thumbnailImg");
+        const video = document.getElementById("video");
+        const videoId = document.getElementById("videoId");
+        const thumbnailImg = document.getElementById("thumbnailImg");
 
-            // Esconde a miniatura e mostra o vídeo
-            thumbnailImg.setAttribute("visible", false);
-            videoId.setAttribute("visible", true);
+        // Esconde a miniatura e mostra o vídeo
+        thumbnailImg.setAttribute("visible", false);
+        videoId.setAttribute("visible", true);
 
-            // Garante que o vídeo esteja pronto para reprodução
-            video.load();
-            video.play().catch(error => {
-                console.error("Erro ao reproduzir o vídeo:", error);
-            });
+        // Garante que o vídeo esteja pronto para reprodução
+        video.load();
+        video.play().catch(error => {
+            console.error("Erro ao reproduzir o vídeo:", error);
         });
+    });
     </script>
 </body>
 </html>
