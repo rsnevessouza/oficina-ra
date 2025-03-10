@@ -11,10 +11,10 @@
     <a-scene embedded arjs="patternRatio:0.90" vr-mode-ui="enabled: false">
         <a-assets>
             <video id="video" playsinline></video>
-            <img id="thumbnail" />
+            <img id="thumbnail">
         </a-assets>
         
-        <a-marker type="pattern" url="./src/files/pattern-qr-code.patt">
+        <a-marker id="marker" type="pattern" >
             <a-video id="videoId" src="#video" width="1.8" height="3.2" position="0 0 0" rotation="-90 0 0" visible="false"></a-video>
             <a-image id="thumbnailImg" src="#thumbnail" width="1.8" height="3.2" position="0 0 0" rotation="-90 0 0" visible="true"></a-image>
         </a-marker>
@@ -91,7 +91,8 @@
 
         // Define o marcador correto
         document.getElementById("marker").setAttribute("url", dadosPagina.marcador);
-    
+    </script>
+    <script>
         window.addEventListener("click", () => {
         const video = document.getElementById("video");
         const videoId = document.getElementById("videoId");
