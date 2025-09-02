@@ -6,8 +6,30 @@
     <title>RA Vídeo</title>
     <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
     <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+    <style>
+        .loading-spinner {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(255,255,255,0.3);
+            border-top: 4px solid #fff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            z-index: 1000;
+            display: none;
+        }
+        
+        @keyframes spin {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+    </style>
 </head>
 <body>
+    <div class="loading-spinner" id="loadingSpinner"></div>
     <a-scene embedded arjs="patternRatio:0.90" vr-mode-ui="enabled: false">
         <a-assets>
             <video id="video" playsinline></video>
@@ -23,9 +45,13 @@
     </a-scene>
 
     <script>
-        // Captura a URL e obtém o parâmetro "pagina"
+        // Captura a URL e obtém o parâmetro "code"
         const params = new URLSearchParams(window.location.search);
-        const pagina = params.get("code") || "1"; // Se não houver parâmetro, usa "1"
+        const codeParam = params.get("code");
+        
+        // Validação do parâmetro code
+        const validCodes = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
+        const pagina = (codeParam && validCodes.includes(codeParam)) ? codeParam : "1";
         // Mapeamento dos arquivos para cada página
         const arquivos = {
             "1": {
@@ -81,33 +107,82 @@
         };    
 
         // Obtém os arquivos correspondentes à página atual
-        const dadosPagina = arquivos[pagina] || arquivos["1"]; // Se não houver, usa a página 1 como fallback
+        const dadosPagina = arquivos[pagina];
 
-        // Define o vídeo correto
-        document.getElementById("video").src = dadosPagina.video;
+        // Função para verificar se arquivo existe
+        function checkAssetExists(url) {
+            return new Promise((resolve) => {
+                const img = new Image();
+                img.onload = () => resolve(true);
+                img.onerror = () => resolve(false);
+                img.src = url;
+            });
+        }
 
-        // Define a thumbnail correta
-        document.getElementById("thumbnail").src = dadosPagina.thumb;
+        // Função para carregar assets com tratamento de erro
+        async function loadAssets() {
+            const spinner = document.getElementById("loadingSpinner");
+            spinner.style.display = "block";
+            
+            try {
+                // Verifica se thumbnail existe
+                const thumbExists = await checkAssetExists(dadosPagina.thumb);
+                if (thumbExists) {
+                    document.getElementById("thumbnail").src = dadosPagina.thumb;
+                } else {
+                    console.warn("Thumbnail não encontrada:", dadosPagina.thumb);
+                }
 
-        // Define o marcador correto
-        document.getElementById("marker").setAttribute("url", dadosPagina.marcador);
-    </script>
-    <script>
+                // Define o vídeo (será carregado quando clicado)
+                document.getElementById("video").src = dadosPagina.video;
+                
+                // Define o marcador
+                document.getElementById("marker").setAttribute("url", dadosPagina.marcador);
+                
+                // Esconde o spinner quando terminar
+                spinner.style.display = "none";
+            } catch (error) {
+                console.error("Erro ao carregar assets:", error);
+                spinner.style.display = "none";
+            }
+        }
+
+        // Carrega os assets
+        loadAssets();
+        
+        // Controle de reprodução de vídeo
+        let isVideoPlaying = false;
+        let videoInitialized = false;
+
         window.addEventListener("click", () => {
-        const video = document.getElementById("video");
-        const videoId = document.getElementById("videoId");
-        const thumbnailImg = document.getElementById("thumbnailImg");
+            const video = document.getElementById("video");
+            const videoId = document.getElementById("videoId");
+            const thumbnailImg = document.getElementById("thumbnailImg");
 
-        // Esconde a miniatura e mostra o vídeo
-        thumbnailImg.setAttribute("visible", false);
-        videoId.setAttribute("visible", true);
-
-        // Garante que o vídeo esteja pronto para reprodução
-        video.load();
-        video.play().catch(error => {
-            console.error("Erro ao reproduzir o vídeo:", error);
+            if (!videoInitialized) {
+                // Primeira execução: mostra vídeo e inicia reprodução
+                thumbnailImg.setAttribute("visible", false);
+                videoId.setAttribute("visible", true);
+                
+                video.load();
+                video.play().catch(error => {
+                    console.error("Erro ao reproduzir o vídeo:", error);
+                });
+                isVideoPlaying = true;
+                videoInitialized = true;
+            } else {
+                // Execuções subsequentes: toggle play/pause
+                if (isVideoPlaying) {
+                    video.pause();
+                    isVideoPlaying = false;
+                } else {
+                    video.play().catch(error => {
+                        console.error("Erro ao reproduzir o vídeo:", error);
+                    });
+                    isVideoPlaying = true;
+                }
+            }
         });
-    });
     </script>
 </body>
 </html>
