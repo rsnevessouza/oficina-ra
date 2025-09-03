@@ -30,7 +30,7 @@
 </head>
 <body>
     <div class="loading-spinner" id="loadingSpinner"></div>
-    <a-scene embedded arjs="patternRatio:0.90" vr-mode-ui="enabled: false">
+    <a-scene embedded arjs="patternRatio:0.90" vr-mode-ui="enabled: false" renderer="antialias: false; precision: mediump;" id="arScene">
         <a-assets>
             <video id="video" playsinline></video>
             <img id="thumbnail">
@@ -149,6 +149,25 @@
 
         // Carrega os assets
         loadAssets();
+        
+        // Otimizações para mobile
+        const isMobile = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
+        
+        if (isMobile) {
+            // Força orientação retrato no mobile
+            if (screen.orientation && screen.orientation.lock) {
+                screen.orientation.lock('portrait').catch(error => {
+                    console.log('Não foi possível bloquear orientação:', error);
+                });
+            }
+            
+            // Ajustes específicos para iOS
+            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+            if (isIOS) {
+                // Força contexto de interação para iOS
+                document.addEventListener('touchstart', function() {}, {passive: true});
+            }
+        }
         
         // Controle de reprodução de vídeo
         let isVideoPlaying = false;
