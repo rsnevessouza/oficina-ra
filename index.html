@@ -167,38 +167,75 @@
                 // Força contexto de interação para iOS
                 document.addEventListener('touchstart', function() {}, {passive: true});
             }
+            
+            // Preload condicional baseado na conexão
+            const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+            const isSlowConnection = connection && (connection.effectiveType === 'slow-2g' || connection.effectiveType === '2g');
+            
+            if (!isSlowConnection) {
+                // Em conexões boas, preload o vídeo silenciosamente
+                const video = document.getElementById("video");
+                video.preload = "metadata";
+            }
         }
         
         // Controle de reprodução de vídeo
         let isVideoPlaying = false;
         let videoInitialized = false;
 
-        window.addEventListener("click", () => {
+        window.addEventListener("click", async () => {
             const video = document.getElementById("video");
             const videoId = document.getElementById("videoId");
             const thumbnailImg = document.getElementById("thumbnailImg");
+            const spinner = document.getElementById("loadingSpinner");
 
             if (!videoInitialized) {
-                // Primeira execução: mostra vídeo e inicia reprodução
+                // Primeira execução: mostra spinner e carrega vídeo
+                spinner.style.display = "block";
                 thumbnailImg.setAttribute("visible", false);
                 videoId.setAttribute("visible", true);
                 
-                video.load();
-                video.play().catch(error => {
-                    console.error("Erro ao reproduzir o vídeo:", error);
-                });
-                isVideoPlaying = true;
-                videoInitialized = true;
+                try {
+                    // Aguarda o vídeo carregar completamente antes de reproduzir
+                    video.load();
+                    
+                    // Timeout para evitar loading infinito
+                    const loadTimeout = setTimeout(() => {
+                        spinner.style.display = "none";
+                        console.warn("Timeout no carregamento do vídeo");
+                    }, 15000);
+                    
+                    // Aguarda o vídeo estar pronto
+                    await new Promise((resolve, reject) => {
+                        video.addEventListener('loadedmetadata', resolve, {once: true});
+                        video.addEventListener('error', reject, {once: true});
+                    });
+                    
+                    clearTimeout(loadTimeout);
+                    spinner.style.display = "none";
+                    
+                    await video.play();
+                    isVideoPlaying = true;
+                    videoInitialized = true;
+                } catch (error) {
+                    spinner.style.display = "none";
+                    console.error("Erro ao carregar/reproduzir o vídeo:", error);
+                    // Volta para thumbnail em caso de erro
+                    thumbnailImg.setAttribute("visible", true);
+                    videoId.setAttribute("visible", false);
+                }
             } else {
                 // Execuções subsequentes: toggle play/pause
                 if (isVideoPlaying) {
                     video.pause();
                     isVideoPlaying = false;
                 } else {
-                    video.play().catch(error => {
+                    try {
+                        await video.play();
+                        isVideoPlaying = true;
+                    } catch (error) {
                         console.error("Erro ao reproduzir o vídeo:", error);
-                    });
-                    isVideoPlaying = true;
+                    }
                 }
             }
         });
