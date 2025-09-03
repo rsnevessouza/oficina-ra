@@ -30,7 +30,7 @@
 </head>
 <body>
     <div class="loading-spinner" id="loadingSpinner"></div>
-    <a-scene embedded arjs="patternRatio:0.90; cameraParametersUrl: data/camera_para.dat; detectionMode: mono_and_matrix; matrixCodeType: 3x3; debugUIEnabled: false; sourceType: webcam; sourceWidth: 1280; sourceHeight: 960; displayWidth: 1280; displayHeight: 960;" vr-mode-ui="enabled: false" renderer="antialias: false; precision: mediump;" id="arScene">
+    <a-scene embedded arjs="patternRatio:0.90" vr-mode-ui="enabled: false" renderer="antialias: false; precision: mediump;" id="arScene">
         <a-assets>
             <video id="video" playsinline></video>
             <img id="thumbnail">
@@ -181,11 +181,18 @@
             // Configurações específicas para Android Chrome
             const isAndroid = /Android/i.test(navigator.userAgent);
             if (isAndroid) {
-                // Força configurações de câmera para evitar zoom
-                setTimeout(() => {
-                    const arScene = document.getElementById("arScene");
-                    arScene.setAttribute('arjs', 'patternRatio:0.90; sourceWidth:640; sourceHeight:480; displayWidth:640; displayHeight:480; cameraParametersUrl: data/camera_para.dat;');
-                }, 1000);
+                // Adiciona CSS para controlar zoom da câmera
+                const style = document.createElement('style');
+                style.textContent = `
+                    #arjsDebugUIContainer { display: none !important; }
+                    canvas { 
+                        transform-origin: center center !important;
+                        object-fit: cover !important;
+                        width: 100% !important;
+                        height: 100% !important;
+                    }
+                `;
+                document.head.appendChild(style);
             }
         }
         
