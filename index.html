@@ -30,7 +30,7 @@
 </head>
 <body>
     <div class="loading-spinner" id="loadingSpinner"></div>
-    <a-scene mindar-image="imageTargetSrc: ./src/files/targets.mind; maxTrack: 1" color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false" id="arScene">
+    <a-scene mindar-image="imageTargetSrc: ; maxTrack: 1" color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false" id="arScene">
         <a-assets>
             <video id="video" playsinline></video>
             <img id="thumbnail">
@@ -41,7 +41,7 @@
             <a-image id="thumbnailImg" src="#thumbnail" width="1.8" height="3.2" position="0 0 0" rotation="-90 0 0" visible="true"></a-image>
         </a-entity>
         
-        <a-entity camera cursor="fuse: false; rayOrigin: mouse;"></a-entity>
+        <a-camera position="0 0 0" look-controls="enabled: false" cursor="fuse: false; rayOrigin: mouse;" wasd-controls="enabled: false;"></a-camera>
     </a-scene>
 
     <script>
@@ -136,12 +136,15 @@
                 // Define o vídeo (será carregado quando clicado)
                 document.getElementById("video").src = dadosPagina.video;
                 
-                // Atualiza o arquivo .mind do MindAR dinamicamente
+                // Configura o MindAR com o marcador correto
                 const scene = document.getElementById("arScene");
                 scene.setAttribute("mindar-image", `imageTargetSrc: ${dadosPagina.marcador}; maxTrack: 1`);
                 
-                // Esconde o spinner quando terminar
-                spinner.style.display = "none";
+                // Aguarda o MindAR inicializar
+                scene.addEventListener('renderstart', function() {
+                    spinner.style.display = "none";
+                });
+                
             } catch (error) {
                 console.error("Erro ao carregar assets:", error);
                 spinner.style.display = "none";
