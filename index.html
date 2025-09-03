@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, shrink-to-fit=no">
     <title>RA Vídeo</title>
     <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
-    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
     <style>
         .loading-spinner {
             position: absolute;
@@ -30,16 +30,16 @@
 </head>
 <body>
     <div class="loading-spinner" id="loadingSpinner"></div>
-    <a-scene embedded arjs="patternRatio:0.90" vr-mode-ui="enabled: false" renderer="antialias: false; precision: mediump;" id="arScene">
+    <a-scene mindar-image="imageTargetSrc: ./src/files/targets.mind; maxTrack: 1" color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false" id="arScene">
         <a-assets>
             <video id="video" playsinline></video>
             <img id="thumbnail">
         </a-assets>
         
-        <a-marker id="marker" type="pattern" >
+        <a-entity id="marker" mindar-image-target="targetIndex: 0">
             <a-video id="videoId" src="#video" width="1.8" height="3.2" position="0 0 0" rotation="-90 0 0" visible="false"></a-video>
             <a-image id="thumbnailImg" src="#thumbnail" width="1.8" height="3.2" position="0 0 0" rotation="-90 0 0" visible="true"></a-image>
-        </a-marker>
+        </a-entity>
         
         <a-entity camera cursor="fuse: false; rayOrigin: mouse;"></a-entity>
     </a-scene>
@@ -57,52 +57,52 @@
             "1": {
                 video: "./src/files/desafio.mp4",
                 thumb: "./src/files/thumbnail.jpg",
-                marcador: "./src/files/pattern-qr-code.patt"
+                marcador: "./src/files/targets.mind"
             },
             "2": {
                 video: "./src/files/video2.mp4",
                 thumb: "./src/files/thumb2.jpg",
-                marcador: "./src/files/pattern2.patt"
+                marcador: "./src/files/targets2.mind"
             },
             "3": {
                 video: "./src/files/video3.mp4",
                 thumb: "./src/files/thumb3.jpg",
-                marcador: "./src/files/pattern3.patt"
+                marcador: "./src/files/targets3.mind"
             },
             "4": {
                 video: "./src/files/video4.mp4",
                 thumb: "./src/files/thumb4.jpg",
-                marcador: "./src/files/pattern4.patt"
+                marcador: "./src/files/targets4.mind"
             },
             "5": {
                 video: "./src/files/video5.mp4",
                 thumb: "./src/files/thumb5.jpg",
-                marcador: "./src/files/pattern5.patt"
+                marcador: "./src/files/targets5.mind"
             },
             "6": {
                 video: "./src/files/video6.mp4",
                 thumb: "./src/files/thumb6.jpg",
-                marcador: "./src/files/pattern6.patt"
+                marcador: "./src/files/targets6.mind"
             },
             "7": {
                 video: "./src/files/video7.mp4",
                 thumb: "./src/files/thumb7.jpg",
-                marcador: "./src/files/pattern7.patt"
+                marcador: "./src/files/targets7.mind"
             },
             "8": {
                 video: "./src/files/video8.mp4",
                 thumb: "./src/files/thumb8.jpg",
-                marcador: "./src/files/pattern8.patt"
+                marcador: "./src/files/targets8.mind"
             },
             "9": {
                 video: "./src/files/video9.mp4",
                 thumb: "./src/files/thumb9.jpg",
-                marcador: "./src/files/pattern9.patt"
+                marcador: "./src/files/targets9.mind"
             },
             "10": {
                 video: "./src/files/video10.mp4",
                 thumb: "./src/files/thumb10.jpg",
-                marcador: "./src/files/pattern10.patt"
+                marcador: "./src/files/targets10.mind"
             }
         };    
 
@@ -136,8 +136,9 @@
                 // Define o vídeo (será carregado quando clicado)
                 document.getElementById("video").src = dadosPagina.video;
                 
-                // Define o marcador
-                document.getElementById("marker").setAttribute("url", dadosPagina.marcador);
+                // Atualiza o arquivo .mind do MindAR dinamicamente
+                const scene = document.getElementById("arScene");
+                scene.setAttribute("mindar-image", `imageTargetSrc: ${dadosPagina.marcador}; maxTrack: 1`);
                 
                 // Esconde o spinner quando terminar
                 spinner.style.display = "none";
