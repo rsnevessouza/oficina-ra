@@ -37,7 +37,7 @@
         </a-assets>
         
         <a-entity id="marker" mindar-image-target="targetIndex: 0">
-            <a-video id="videoId" src="#video" width="1.8" height="3.2" position="0 0 0" rotation="-90 0 0" visible="false"></a-video>
+            <a-video id="videoId" src="#video" width="1.8" height="3.2" position="0 0.1 0" rotation="0 0 0" visible="false"></a-video>
             <a-image id="thumbnailImg" src="#thumbnail" width="1.8" height="3.2" position="0 0.1 0" rotation="0 0 0" visible="true"></a-image>
         </a-entity>
         
@@ -204,7 +204,8 @@
         let isVideoPlaying = false;
         let videoInitialized = false;
 
-        window.addEventListener("click", async () => {
+        // Função para lidar com cliques nos elementos AR
+        async function handleARClick() {
             const video = document.getElementById("video");
             const videoId = document.getElementById("videoId");
             const thumbnailImg = document.getElementById("thumbnailImg");
@@ -259,6 +260,21 @@
                     }
                 }
             }
+        }
+        
+        // Adiciona eventos de clique aos elementos AR
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(() => {
+                const thumbnailImg = document.getElementById("thumbnailImg");
+                const videoId = document.getElementById("videoId");
+                
+                if (thumbnailImg) {
+                    thumbnailImg.addEventListener('click', handleARClick);
+                }
+                if (videoId) {
+                    videoId.addEventListener('click', handleARClick);
+                }
+            }, 2000);
         });
     </script>
 </body>
