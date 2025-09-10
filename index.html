@@ -30,15 +30,80 @@
 </head>
 <body>
     <div class="loading-spinner" id="loadingSpinner"></div>
-    <a-scene mindar-image="imageTargetSrc: ; maxTrack: 1" color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false" id="arScene">
+    <a-scene mindar-image="imageTargetSrc: ./src/files/all-targets.mind; maxTrack: 10" color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false" id="arScene">
         <a-assets>
-            <video id="video" playsinline></video>
-            <img id="thumbnail">
+            <video id="video-1" playsinline></video>
+            <video id="video-2" playsinline></video>
+            <video id="video-3" playsinline></video>
+            <video id="video-4" playsinline></video>
+            <video id="video-5" playsinline></video>
+            <video id="video-6" playsinline></video>
+            <video id="video-7" playsinline></video>
+            <video id="video-8" playsinline></video>
+            <video id="video-9" playsinline></video>
+            <video id="video-10" playsinline></video>
+            
+            <img id="thumbnail-1">
+            <img id="thumbnail-2">
+            <img id="thumbnail-3">
+            <img id="thumbnail-4">
+            <img id="thumbnail-5">
+            <img id="thumbnail-6">
+            <img id="thumbnail-7">
+            <img id="thumbnail-8">
+            <img id="thumbnail-9">
+            <img id="thumbnail-10">
         </a-assets>
         
-        <a-entity id="marker" mindar-image-target="targetIndex: 0">
-            <a-video id="videoId" src="#video" width="1.8" height="3.2" position="0 0.1 0" rotation="0 0 0" visible="false"></a-video>
-            <a-image id="thumbnailImg" src="#thumbnail" width="1.8" height="3.2" position="0 0.1 0" rotation="0 0 0" visible="true"></a-image>
+        <!-- Marcadores para cada página do livro -->
+        <a-entity id="marker-1" mindar-image-target="targetIndex: 0">
+            <a-video id="videoId-1" src="#video-1" width="1.8" height="3.2" position="0 0.1 0" rotation="0 0 0" visible="false"></a-video>
+            <a-image id="thumbnailImg-1" src="#thumbnail-1" width="1.8" height="3.2" position="0 0.1 0" rotation="0 0 0" visible="true"></a-image>
+        </a-entity>
+        
+        <a-entity id="marker-2" mindar-image-target="targetIndex: 1">
+            <a-video id="videoId-2" src="#video-2" width="1.8" height="3.2" position="0 0.1 0" rotation="0 0 0" visible="false"></a-video>
+            <a-image id="thumbnailImg-2" src="#thumbnail-2" width="1.8" height="3.2" position="0 0.1 0" rotation="0 0 0" visible="true"></a-image>
+        </a-entity>
+        
+        <a-entity id="marker-3" mindar-image-target="targetIndex: 2">
+            <a-video id="videoId-3" src="#video-3" width="1.8" height="3.2" position="0 0.1 0" rotation="0 0 0" visible="false"></a-video>
+            <a-image id="thumbnailImg-3" src="#thumbnail-3" width="1.8" height="3.2" position="0 0.1 0" rotation="0 0 0" visible="true"></a-image>
+        </a-entity>
+        
+        <a-entity id="marker-4" mindar-image-target="targetIndex: 3">
+            <a-video id="videoId-4" src="#video-4" width="1.8" height="3.2" position="0 0.1 0" rotation="0 0 0" visible="false"></a-video>
+            <a-image id="thumbnailImg-4" src="#thumbnail-4" width="1.8" height="3.2" position="0 0.1 0" rotation="0 0 0" visible="true"></a-image>
+        </a-entity>
+        
+        <a-entity id="marker-5" mindar-image-target="targetIndex: 4">
+            <a-video id="videoId-5" src="#video-5" width="1.8" height="3.2" position="0 0.1 0" rotation="0 0 0" visible="false"></a-video>
+            <a-image id="thumbnailImg-5" src="#thumbnail-5" width="1.8" height="3.2" position="0 0.1 0" rotation="0 0 0" visible="true"></a-image>
+        </a-entity>
+        
+        <a-entity id="marker-6" mindar-image-target="targetIndex: 5">
+            <a-video id="videoId-6" src="#video-6" width="1.8" height="3.2" position="0 0.1 0" rotation="0 0 0" visible="false"></a-video>
+            <a-image id="thumbnailImg-6" src="#thumbnail-6" width="1.8" height="3.2" position="0 0.1 0" rotation="0 0 0" visible="true"></a-image>
+        </a-entity>
+        
+        <a-entity id="marker-7" mindar-image-target="targetIndex: 6">
+            <a-video id="videoId-7" src="#video-7" width="1.8" height="3.2" position="0 0.1 0" rotation="0 0 0" visible="false"></a-video>
+            <a-image id="thumbnailImg-7" src="#thumbnail-7" width="1.8" height="3.2" position="0 0.1 0" rotation="0 0 0" visible="true"></a-image>
+        </a-entity>
+        
+        <a-entity id="marker-8" mindar-image-target="targetIndex: 7">
+            <a-video id="videoId-8" src="#video-8" width="1.8" height="3.2" position="0 0.1 0" rotation="0 0 0" visible="false"></a-video>
+            <a-image id="thumbnailImg-8" src="#thumbnail-8" width="1.8" height="3.2" position="0 0.1 0" rotation="0 0 0" visible="true"></a-image>
+        </a-entity>
+        
+        <a-entity id="marker-9" mindar-image-target="targetIndex: 8">
+            <a-video id="videoId-9" src="#video-9" width="1.8" height="3.2" position="0 0.1 0" rotation="0 0 0" visible="false"></a-video>
+            <a-image id="thumbnailImg-9" src="#thumbnail-9" width="1.8" height="3.2" position="0 0.1 0" rotation="0 0 0" visible="true"></a-image>
+        </a-entity>
+        
+        <a-entity id="marker-10" mindar-image-target="targetIndex: 9">
+            <a-video id="videoId-10" src="#video-10" width="1.8" height="3.2" position="0 0.1 0" rotation="0 0 0" visible="false"></a-video>
+            <a-image id="thumbnailImg-10" src="#thumbnail-10" width="1.8" height="3.2" position="0 0.1 0" rotation="0 0 0" visible="true"></a-image>
         </a-entity>
         
         <a-camera position="0 0 0" look-controls="enabled: false" wasd-controls="enabled: false;">
@@ -47,69 +112,49 @@
     </a-scene>
 
     <script>
-        // Captura a URL e obtém o parâmetro "code"
-        const params = new URLSearchParams(window.location.search);
-        const codeParam = params.get("code");
-        
-        // Validação do parâmetro code
-        const validCodes = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
-        const pagina = (codeParam && validCodes.includes(codeParam)) ? codeParam : "1";
         // Mapeamento dos arquivos para cada página
         const arquivos = {
-            "1": {
-                video: "./src/files/desafio.mp4",
-                thumb: "./src/files/thumbnail.jpg",
-                marcador: "./src/files/targets.mind"
+            1: {
+                video: "./src/files/video1.mp4",
+                thumb: "./src/files/thumb1.jpg"
             },
-            "2": {
+            2: {
                 video: "./src/files/video2.mp4",
-                thumb: "./src/files/thumb2.jpg",
-                marcador: "./src/files/targets2.mind"
+                thumb: "./src/files/thumb2.jpg"
             },
-            "3": {
+            3: {
                 video: "./src/files/video3.mp4",
-                thumb: "./src/files/thumb3.jpg",
-                marcador: "./src/files/targets3.mind"
+                thumb: "./src/files/thumb3.jpg"
             },
-            "4": {
+            4: {
                 video: "./src/files/video4.mp4",
-                thumb: "./src/files/thumb4.jpg",
-                marcador: "./src/files/targets4.mind"
+                thumb: "./src/files/thumb4.jpg"
             },
-            "5": {
+            5: {
                 video: "./src/files/video5.mp4",
-                thumb: "./src/files/thumb5.jpg",
-                marcador: "./src/files/targets5.mind"
+                thumb: "./src/files/thumb5.jpg"
             },
-            "6": {
+            6: {
                 video: "./src/files/video6.mp4",
-                thumb: "./src/files/thumb6.jpg",
-                marcador: "./src/files/targets6.mind"
+                thumb: "./src/files/thumb6.jpg"
             },
-            "7": {
+            7: {
                 video: "./src/files/video7.mp4",
-                thumb: "./src/files/thumb7.jpg",
-                marcador: "./src/files/targets7.mind"
+                thumb: "./src/files/thumb7.jpg"
             },
-            "8": {
+            8: {
                 video: "./src/files/video8.mp4",
-                thumb: "./src/files/thumb8.jpg",
-                marcador: "./src/files/targets8.mind"
+                thumb: "./src/files/thumb8.jpg"
             },
-            "9": {
+            9: {
                 video: "./src/files/video9.mp4",
-                thumb: "./src/files/thumb9.jpg",
-                marcador: "./src/files/targets9.mind"
+                thumb: "./src/files/thumb9.jpg"
             },
-            "10": {
+            10: {
                 video: "./src/files/video10.mp4",
-                thumb: "./src/files/thumb10.jpg",
-                marcador: "./src/files/targets10.mind"
+                thumb: "./src/files/thumb10.jpg"
             }
-        };    
-
-        // Obtém os arquivos correspondentes à página atual
-        const dadosPagina = arquivos[pagina];
+        };
 
         // Função para verificar se arquivo existe
         function checkAssetExists(url) {
@@ -121,28 +166,30 @@
             });
         }
 
-        // Função para carregar assets com tratamento de erro
+        // Função para carregar todos os assets
         async function loadAssets() {
             const spinner = document.getElementById("loadingSpinner");
             spinner.style.display = "block";
             
             try {
-                // Verifica se thumbnail existe
-                const thumbExists = await checkAssetExists(dadosPagina.thumb);
-                if (thumbExists) {
-                    document.getElementById("thumbnail").src = dadosPagina.thumb;
-                } else {
-                    console.warn("Thumbnail não encontrada:", dadosPagina.thumb);
-                }
+                // Carrega todos os vídeos e thumbnails
+                for (let i = 1; i <= 10; i++) {
+                    const dados = arquivos[i];
+                    
+                    // Verifica se thumbnail existe
+                    const thumbExists = await checkAssetExists(dados.thumb);
+                    if (thumbExists) {
+                        document.getElementById(`thumbnail-${i}`).src = dados.thumb;
+                    } else {
+                        console.warn(`Thumbnail ${i} não encontrada:`, dados.thumb);
+                    }
 
-                // Define o vídeo (será carregado quando clicado)
-                document.getElementById("video").src = dadosPagina.video;
-                
-                // Configura o MindAR com o marcador correto
-                const scene = document.getElementById("arScene");
-                scene.setAttribute("mindar-image", `imageTargetSrc: ${dadosPagina.marcador}; maxTrack: 1`);
+                    // Define o vídeo
+                    document.getElementById(`video-${i}`).src = dados.video;
+                }
                 
                 // Aguarda o MindAR inicializar
+                const scene = document.getElementById("arScene");
                 scene.addEventListener('renderstart', function() {
                     spinner.style.display = "none";
                 });
@@ -202,18 +249,27 @@
             }
         }
         
-        // Controle de reprodução de vídeo
-        let isVideoPlaying = false;
-        let videoInitialized = false;
+        // Controle de reprodução de vídeo para cada página
+        const videoStates = {};
+        
+        // Inicializa estados dos vídeos
+        for (let i = 1; i <= 10; i++) {
+            videoStates[i] = {
+                isPlaying: false,
+                initialized: false
+            };
+        }
 
         // Função para lidar com cliques nos elementos AR
-        async function handleARClick() {
-            const video = document.getElementById("video");
-            const videoId = document.getElementById("videoId");
-            const thumbnailImg = document.getElementById("thumbnailImg");
+        async function handleARClick(pageNumber) {
+            const video = document.getElementById(`video-${pageNumber}`);
+            const videoId = document.getElementById(`videoId-${pageNumber}`);
+            const thumbnailImg = document.getElementById(`thumbnailImg-${pageNumber}`);
             const spinner = document.getElementById("loadingSpinner");
+            
+            const state = videoStates[pageNumber];
 
-            if (!videoInitialized) {
+            if (!state.initialized) {
                 // Primeira execução: mostra spinner e carrega vídeo
                 spinner.style.display = "block";
                 thumbnailImg.setAttribute("visible", false);
@@ -226,7 +282,7 @@
                     // Timeout para evitar loading infinito
                     const loadTimeout = setTimeout(() => {
                         spinner.style.display = "none";
-                        console.warn("Timeout no carregamento do vídeo");
+                        console.warn(`Timeout no carregamento do vídeo ${pageNumber}`);
                     }, 15000);
                     
                     // Aguarda o vídeo estar pronto
@@ -239,26 +295,26 @@
                     spinner.style.display = "none";
                     
                     await video.play();
-                    isVideoPlaying = true;
-                    videoInitialized = true;
+                    state.isPlaying = true;
+                    state.initialized = true;
                 } catch (error) {
                     spinner.style.display = "none";
-                    console.error("Erro ao carregar/reproduzir o vídeo:", error);
+                    console.error(`Erro ao carregar/reproduzir o vídeo ${pageNumber}:`, error);
                     // Volta para thumbnail em caso de erro
                     thumbnailImg.setAttribute("visible", true);
                     videoId.setAttribute("visible", false);
                 }
             } else {
                 // Execuções subsequentes: toggle play/pause
-                if (isVideoPlaying) {
+                if (state.isPlaying) {
                     video.pause();
-                    isVideoPlaying = false;
+                    state.isPlaying = false;
                 } else {
                     try {
                         await video.play();
-                        isVideoPlaying = true;
+                        state.isPlaying = true;
                     } catch (error) {
-                        console.error("Erro ao reproduzir o vídeo:", error);
+                        console.error(`Erro ao reproduzir o vídeo ${pageNumber}:`, error);
                     }
                 }
             }
@@ -267,15 +323,37 @@
         // Adiciona eventos de clique aos elementos AR
         document.addEventListener('DOMContentLoaded', function() {
             setTimeout(() => {
-                const marker = document.getElementById("marker");
-                
-                // Evento para desktop e mobile
-                marker.addEventListener('click', handleARClick);
-                marker.addEventListener('touchstart', handleARClick);
+                // Adiciona eventos para cada marcador
+                for (let i = 1; i <= 10; i++) {
+                    const marker = document.getElementById(`marker-${i}`);
+                    const thumbnailImg = document.getElementById(`thumbnailImg-${i}`);
+                    const videoId = document.getElementById(`videoId-${i}`);
+                    
+                    if (marker) {
+                        marker.addEventListener('click', () => handleARClick(i));
+                        marker.addEventListener('touchstart', () => handleARClick(i));
+                    }
+                    
+                    if (thumbnailImg) {
+                        thumbnailImg.addEventListener('click', () => handleARClick(i));
+                        thumbnailImg.addEventListener('touchstart', () => handleARClick(i));
+                    }
+                    
+                    if (videoId) {
+                        videoId.addEventListener('click', () => handleARClick(i));
+                        videoId.addEventListener('touchstart', () => handleARClick(i));
+                    }
+                }
                 
                 // Também adiciona ao body para garantir
-                document.body.addEventListener('click', handleARClick);
-                document.body.addEventListener('touchstart', handleARClick);
+                document.body.addEventListener('click', function(e) {
+                    // Tenta identificar qual marcador foi clicado
+                    const target = e.target.closest('[id^="marker-"]');
+                    if (target) {
+                        const pageNumber = parseInt(target.id.split('-')[1]);
+                        handleARClick(pageNumber);
+                    }
+                });
             }, 2000);
         });
     </script>
