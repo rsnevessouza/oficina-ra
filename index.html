@@ -30,29 +30,13 @@
 </head>
 <body>
     <div class="loading-spinner" id="loadingSpinner"></div>
-    <a-scene mindar-image="imageTargetSrc: ./targets.mind; maxTrack: 2" color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false" id="arScene">
+    <a-scene mindar-image="imageTargetSrc: ./src/files/targets.mind; maxTrack: 2" color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false" id="arScene">
         <a-assets>
             <video id="video-1" playsinline></video>
             <video id="video-2" playsinline></video>
-            <video id="video-3" playsinline></video>
-            <video id="video-4" playsinline></video>
-            <video id="video-5" playsinline></video>
-            <video id="video-6" playsinline></video>
-            <video id="video-7" playsinline></video>
-            <video id="video-8" playsinline></video>
-            <video id="video-9" playsinline></video>
-            <video id="video-10" playsinline></video>
 
             <img id="thumbnail-1">
             <img id="thumbnail-2">
-            <img id="thumbnail-3">
-            <img id="thumbnail-4">
-            <img id="thumbnail-5">
-            <img id="thumbnail-6">
-            <img id="thumbnail-7">
-            <img id="thumbnail-8">
-            <img id="thumbnail-9">
-            <img id="thumbnail-10">
         </a-assets>
 
         <!-- Marcadores para cada página do livro -->
@@ -64,46 +48,6 @@
         <a-entity id="marker-2" mindar-image-target="targetIndex: 1">
             <a-video id="videoId-2" src="#video-2" width="1.8" height="3.2" position="0 0.1 0" rotation="0 0 0" visible="false"></a-video>
             <a-image id="thumbnailImg-2" src="#thumbnail-2" width="1.8" height="3.2" position="0 0.1 0" rotation="0 0 0" visible="true"></a-image>
-        </a-entity>
-
-        <a-entity id="marker-3" mindar-image-target="targetIndex: 2">
-            <a-video id="videoId-3" src="#video-3" width="1.8" height="3.2" position="0 0.1 0" rotation="0 0 0" visible="false"></a-video>
-            <a-image id="thumbnailImg-3" src="#thumbnail-3" width="1.8" height="3.2" position="0 0.1 0" rotation="0 0 0" visible="true"></a-image>
-        </a-entity>
-
-        <a-entity id="marker-4" mindar-image-target="targetIndex: 3">
-            <a-video id="videoId-4" src="#video-4" width="1.8" height="3.2" position="0 0.1 0" rotation="0 0 0" visible="false"></a-video>
-            <a-image id="thumbnailImg-4" src="#thumbnail-4" width="1.8" height="3.2" position="0 0.1 0" rotation="0 0 0" visible="true"></a-image>
-        </a-entity>
-
-        <a-entity id="marker-5" mindar-image-target="targetIndex: 4">
-            <a-video id="videoId-5" src="#video-5" width="1.8" height="3.2" position="0 0.1 0" rotation="0 0 0" visible="false"></a-video>
-            <a-image id="thumbnailImg-5" src="#thumbnail-5" width="1.8" height="3.2" position="0 0.1 0" rotation="0 0 0" visible="true"></a-image>
-        </a-entity>
-
-        <a-entity id="marker-6" mindar-image-target="targetIndex: 5">
-            <a-video id="videoId-6" src="#video-6" width="1.8" height="3.2" position="0 0.1 0" rotation="0 0 0" visible="false"></a-video>
-            <a-image id="thumbnailImg-6" src="#thumbnail-6" width="1.8" height="3.2" position="0 0.1 0" rotation="0 0 0" visible="true"></a-image>
-        </a-entity>
-
-        <a-entity id="marker-7" mindar-image-target="targetIndex: 6">
-            <a-video id="videoId-7" src="#video-7" width="1.8" height="3.2" position="0 0.1 0" rotation="0 0 0" visible="false"></a-video>
-            <a-image id="thumbnailImg-7" src="#thumbnail-7" width="1.8" height="3.2" position="0 0.1 0" rotation="0 0 0" visible="true"></a-image>
-        </a-entity>
-
-        <a-entity id="marker-8" mindar-image-target="targetIndex: 7">
-            <a-video id="videoId-8" src="#video-8" width="1.8" height="3.2" position="0 0.1 0" rotation="0 0 0" visible="false"></a-video>
-            <a-image id="thumbnailImg-8" src="#thumbnail-8" width="1.8" height="3.2" position="0 0.1 0" rotation="0 0 0" visible="true"></a-image>
-        </a-entity>
-
-        <a-entity id="marker-9" mindar-image-target="targetIndex: 8">
-            <a-video id="videoId-9" src="#video-9" width="1.8" height="3.2" position="0 0.1 0" rotation="0 0 0" visible="false"></a-video>
-            <a-image id="thumbnailImg-9" src="#thumbnail-9" width="1.8" height="3.2" position="0 0.1 0" rotation="0 0 0" visible="true"></a-image>
-        </a-entity>
-
-        <a-entity id="marker-10" mindar-image-target="targetIndex: 9">
-            <a-video id="videoId-10" src="#video-10" width="1.8" height="3.2" position="0 0.1 0" rotation="0 0 0" visible="false"></a-video>
-            <a-image id="thumbnailImg-10" src="#thumbnail-10" width="1.8" height="3.2" position="0 0.1 0" rotation="0 0 0" visible="true"></a-image>
         </a-entity>
 
         <a-camera position="0 0 0" look-controls="enabled: false" wasd-controls="enabled: false;">
