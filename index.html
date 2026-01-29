@@ -32,25 +32,38 @@
     <div class="loading-spinner" id="loadingSpinner"></div>
     <a-scene mindar-image="imageTargetSrc: ./src/files/targets.mind; maxTrack: 2" color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false" id="arScene">
         <a-assets>
-            <video id="video-1" playsinline webkit-playsinline crossorigin="anonymous"></video>
-            <video id="video-2" playsinline webkit-playsinline crossorigin="anonymous"></video>
+            <video
+                id="video-1"
+                playsinline
+                webkit-playsinline
+                preload="auto"
+                muted="false"
+                autoplay="false">
+            </video>
+            <video
+                id="video-2"
+                playsinline
+                webkit-playsinline
+                preload="auto"
+                muted="false"
+                autoplay="false">
+            </video>
 
-            <img id="thumbnail-1" crossorigin="anonymous">
-            <img id="thumbnail-2" crossorigin="anonymous">
+            <img id="thumbnail-1">
+            <img id="thumbnail-2">
         </a-assets>
 
         <!-- Marcadores para cada página do livro -->
         <a-entity id="marker-1" mindar-image-target="targetIndex: 0">
-            <a-video
+            <a-plane
                 id="videoId-1"
-                src="#video-1"
                 width="1.8"
                 height="3.2"
                 position="0 0.1 0"
                 rotation="0 0 0"
                 visible="false"
-                material="shader: flat; side: double">
-            </a-video>
+                material="src: #video-1; shader: flat; side: double">
+            </a-plane>
             <a-image
                 id="thumbnailImg-1"
                 src="#thumbnail-1"
@@ -63,16 +76,15 @@
         </a-entity>
 
         <a-entity id="marker-2" mindar-image-target="targetIndex: 1">
-            <a-video
+            <a-plane
                 id="videoId-2"
-                src="#video-2"
                 width="1.8"
                 height="3.2"
                 position="0 0.1 0"
                 rotation="0 0 0"
                 visible="false"
-                material="shader: flat; side: double">
-            </a-video>
+                material="src: #video-2; shader: flat; side: double">
+            </a-plane>
             <a-image
                 id="thumbnailImg-2"
                 src="#thumbnail-2"
@@ -254,6 +266,24 @@
                 });
 
                 try {
+                    // Força recriação da texture no iOS
+                    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+                    if (isIOS) {
+                        console.log('iOS detectado - aplicando correções...');
+
+                        // Remove e reaplica o material para forçar refresh
+                        const currentMaterial = videoEl.getAttribute('material');
+                        videoEl.removeAttribute('material');
+
+                        await new Promise(resolve => setTimeout(resolve, 100));
+
+                        videoEl.setAttribute('material', {
+                            src: `#video-${pageNumber}`,
+                            shader: 'flat',
+                            side: 'double'
+                        });
+                    }
+
                     // Garante que o vídeo está carregado
                     if (video.readyState < 2) {
                         console.log(`Carregando vídeo ${pageNumber}...`);
@@ -265,6 +295,8 @@
                         });
                     }
 
+                    console.log(`Vídeo ${pageNumber} carregado. Dimensões: ${video.videoWidth}x${video.videoHeight}`);
+
                     // Reproduz o vídeo
                     console.log(`Tentando reproduzir vídeo ${pageNumber}...`);
                     await video.play();
@@ -272,13 +304,21 @@
                     console.log(`✅ Vídeo ${pageNumber} reproduzindo!`, {
                         paused: video.paused,
                         currentTime: video.currentTime,
-                        duration: video.duration
+                        duration: video.duration,
+                        videoWidth: video.videoWidth,
+                        videoHeight: video.videoHeight
                     });
 
                     state.isPlaying = true;
                     state.initialized = true;
                 } catch (error) {
                     console.error(`❌ Erro ao reproduzir vídeo ${pageNumber}:`, error);
+                    console.error('Detalhes do vídeo:', {
+                        src: video.src,
+                        readyState: video.readyState,
+                        networkState: video.networkState,
+                        error: video.error
+                    });
                     alert(`Erro ao carregar vídeo ${pageNumber}: ${error.message}`);
 
                     // Volta para thumbnail
