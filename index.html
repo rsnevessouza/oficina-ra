@@ -30,16 +30,32 @@
 </head>
 <body>
     <div class="loading-spinner" id="loadingSpinner"></div>
-    <a-scene mindar-image="imageTargetSrc: ./src/files/targets.mind; maxTrack: 2" color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false" id="arScene">
+    <a-scene mindar-image="imageTargetSrc: ./targets.mind; maxTrack: 2" color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false" id="arScene">
         <a-assets>
-            <video id="video-1" playsinline webkit-playsinline crossorigin="anonymous"></video>
-            <video id="video-2" playsinline webkit-playsinline crossorigin="anonymous"></video>
+            <video id="video-1" playsinline></video>
+            <video id="video-2" playsinline></video>
+            <video id="video-3" playsinline></video>
+            <video id="video-4" playsinline></video>
+            <video id="video-5" playsinline></video>
+            <video id="video-6" playsinline></video>
+            <video id="video-7" playsinline></video>
+            <video id="video-8" playsinline></video>
+            <video id="video-9" playsinline></video>
+            <video id="video-10" playsinline></video>
 
-            <img id="thumbnail-1" crossorigin="anonymous">
-            <img id="thumbnail-2" crossorigin="anonymous">
+            <img id="thumbnail-1">
+            <img id="thumbnail-2">
+            <img id="thumbnail-3">
+            <img id="thumbnail-4">
+            <img id="thumbnail-5">
+            <img id="thumbnail-6">
+            <img id="thumbnail-7">
+            <img id="thumbnail-8">
+            <img id="thumbnail-9">
+            <img id="thumbnail-10">
         </a-assets>
 
-        <!-- Marcadores para teste multi-target (apenas 2) -->
+        <!-- Marcadores para cada página do livro -->
         <a-entity id="marker-1" mindar-image-target="targetIndex: 0">
             <a-video id="videoId-1" src="#video-1" width="1.8" height="3.2" position="0 0.1 0" rotation="0 0 0" visible="false"></a-video>
             <a-image id="thumbnailImg-1" src="#thumbnail-1" width="1.8" height="3.2" position="0 0.1 0" rotation="0 0 0" visible="true"></a-image>
@@ -48,6 +64,46 @@
         <a-entity id="marker-2" mindar-image-target="targetIndex: 1">
             <a-video id="videoId-2" src="#video-2" width="1.8" height="3.2" position="0 0.1 0" rotation="0 0 0" visible="false"></a-video>
             <a-image id="thumbnailImg-2" src="#thumbnail-2" width="1.8" height="3.2" position="0 0.1 0" rotation="0 0 0" visible="true"></a-image>
+        </a-entity>
+
+        <a-entity id="marker-3" mindar-image-target="targetIndex: 2">
+            <a-video id="videoId-3" src="#video-3" width="1.8" height="3.2" position="0 0.1 0" rotation="0 0 0" visible="false"></a-video>
+            <a-image id="thumbnailImg-3" src="#thumbnail-3" width="1.8" height="3.2" position="0 0.1 0" rotation="0 0 0" visible="true"></a-image>
+        </a-entity>
+
+        <a-entity id="marker-4" mindar-image-target="targetIndex: 3">
+            <a-video id="videoId-4" src="#video-4" width="1.8" height="3.2" position="0 0.1 0" rotation="0 0 0" visible="false"></a-video>
+            <a-image id="thumbnailImg-4" src="#thumbnail-4" width="1.8" height="3.2" position="0 0.1 0" rotation="0 0 0" visible="true"></a-image>
+        </a-entity>
+
+        <a-entity id="marker-5" mindar-image-target="targetIndex: 4">
+            <a-video id="videoId-5" src="#video-5" width="1.8" height="3.2" position="0 0.1 0" rotation="0 0 0" visible="false"></a-video>
+            <a-image id="thumbnailImg-5" src="#thumbnail-5" width="1.8" height="3.2" position="0 0.1 0" rotation="0 0 0" visible="true"></a-image>
+        </a-entity>
+
+        <a-entity id="marker-6" mindar-image-target="targetIndex: 5">
+            <a-video id="videoId-6" src="#video-6" width="1.8" height="3.2" position="0 0.1 0" rotation="0 0 0" visible="false"></a-video>
+            <a-image id="thumbnailImg-6" src="#thumbnail-6" width="1.8" height="3.2" position="0 0.1 0" rotation="0 0 0" visible="true"></a-image>
+        </a-entity>
+
+        <a-entity id="marker-7" mindar-image-target="targetIndex: 6">
+            <a-video id="videoId-7" src="#video-7" width="1.8" height="3.2" position="0 0.1 0" rotation="0 0 0" visible="false"></a-video>
+            <a-image id="thumbnailImg-7" src="#thumbnail-7" width="1.8" height="3.2" position="0 0.1 0" rotation="0 0 0" visible="true"></a-image>
+        </a-entity>
+
+        <a-entity id="marker-8" mindar-image-target="targetIndex: 7">
+            <a-video id="videoId-8" src="#video-8" width="1.8" height="3.2" position="0 0.1 0" rotation="0 0 0" visible="false"></a-video>
+            <a-image id="thumbnailImg-8" src="#thumbnail-8" width="1.8" height="3.2" position="0 0.1 0" rotation="0 0 0" visible="true"></a-image>
+        </a-entity>
+
+        <a-entity id="marker-9" mindar-image-target="targetIndex: 8">
+            <a-video id="videoId-9" src="#video-9" width="1.8" height="3.2" position="0 0.1 0" rotation="0 0 0" visible="false"></a-video>
+            <a-image id="thumbnailImg-9" src="#thumbnail-9" width="1.8" height="3.2" position="0 0.1 0" rotation="0 0 0" visible="true"></a-image>
+        </a-entity>
+
+        <a-entity id="marker-10" mindar-image-target="targetIndex: 9">
+            <a-video id="videoId-10" src="#video-10" width="1.8" height="3.2" position="0 0.1 0" rotation="0 0 0" visible="false"></a-video>
+            <a-image id="thumbnailImg-10" src="#thumbnail-10" width="1.8" height="3.2" position="0 0.1 0" rotation="0 0 0" visible="true"></a-image>
         </a-entity>
 
         <a-camera position="0 0 0" look-controls="enabled: false" wasd-controls="enabled: false;">
@@ -96,26 +152,15 @@
                         console.warn(`Thumbnail ${i} não encontrada:`, dados.thumb);
                     }
 
-                    // Define o vídeo - SEM PRELOAD para iOS
-                    const videoEl = document.getElementById(`video-${i}`);
-                    videoEl.src = dados.video;
-                    videoEl.load();
+                    // Define o vídeo
+                    document.getElementById(`video-${i}`).src = dados.video;
                 }
 
                 // Aguarda o MindAR inicializar
                 const scene = document.getElementById("arScene");
                 scene.addEventListener('renderstart', function() {
-                    console.log('MindAR renderizado!');
-                    setTimeout(() => {
-                        spinner.style.display = "none";
-                    }, 500);
-                });
-
-                // Timeout de segurança para remover spinner
-                setTimeout(() => {
                     spinner.style.display = "none";
-                    console.log('Spinner removido por timeout');
-                }, 5000);
+                });
 
             } catch (error) {
                 console.error("Erro ao carregar assets:", error);
@@ -183,10 +228,8 @@
             };
         }
 
-        // Função para lidar com cliques nos elementos AR - OTIMIZADA PARA iOS
+        // Função para lidar com cliques nos elementos AR
         async function handleARClick(pageNumber) {
-            console.log(`Click detectado no marcador ${pageNumber}`);
-
             const video = document.getElementById(`video-${pageNumber}`);
             const videoId = document.getElementById(`videoId-${pageNumber}`);
             const thumbnailImg = document.getElementById(`thumbnailImg-${pageNumber}`);
@@ -195,45 +238,51 @@
             const state = videoStates[pageNumber];
 
             if (!state.initialized) {
-                console.log(`Primeira inicialização do vídeo ${pageNumber}`);
-
-                // Esconde thumbnail e mostra vídeo IMEDIATAMENTE
+                // Primeira execução: mostra spinner e carrega vídeo
+                spinner.style.display = "block";
                 thumbnailImg.setAttribute("visible", false);
                 videoId.setAttribute("visible", true);
 
                 try {
-                    // Tenta reproduzir diretamente (iOS requer interação do usuário)
-                    const playPromise = video.play();
+                    // Aguarda o vídeo carregar completamente antes de reproduzir
+                    video.load();
 
-                    if (playPromise !== undefined) {
-                        await playPromise;
-                        console.log(`Vídeo ${pageNumber} reproduzindo`);
-                        state.isPlaying = true;
-                        state.initialized = true;
-                    }
+                    // Timeout para evitar loading infinito
+                    const loadTimeout = setTimeout(() => {
+                        spinner.style.display = "none";
+                        console.warn(`Timeout no carregamento do vídeo ${pageNumber}`);
+                    }, 15000);
+
+                    // Aguarda o vídeo estar pronto
+                    await new Promise((resolve, reject) => {
+                        video.addEventListener('loadedmetadata', resolve, {once: true});
+                        video.addEventListener('error', reject, {once: true});
+                    });
+
+                    clearTimeout(loadTimeout);
+                    spinner.style.display = "none";
+
+                    await video.play();
+                    state.isPlaying = true;
+                    state.initialized = true;
                 } catch (error) {
-                    console.error(`Erro ao reproduzir vídeo ${pageNumber}:`, error);
-
-                    // Se falhar, volta para thumbnail
-                    alert(`Erro ao carregar vídeo ${pageNumber}. Verifique se o arquivo existe.`);
+                    spinner.style.display = "none";
+                    console.error(`Erro ao carregar/reproduzir o vídeo ${pageNumber}:`, error);
+                    // Volta para thumbnail em caso de erro
                     thumbnailImg.setAttribute("visible", true);
                     videoId.setAttribute("visible", false);
                 }
             } else {
-                // Toggle play/pause
-                console.log(`Toggle play/pause do vídeo ${pageNumber}`);
-
+                // Execuções subsequentes: toggle play/pause
                 if (state.isPlaying) {
                     video.pause();
                     state.isPlaying = false;
-                    console.log(`Vídeo ${pageNumber} pausado`);
                 } else {
                     try {
                         await video.play();
                         state.isPlaying = true;
-                        console.log(`Vídeo ${pageNumber} retomado`);
                     } catch (error) {
-                        console.error(`Erro ao retomar vídeo ${pageNumber}:`, error);
+                        console.error(`Erro ao reproduzir o vídeo ${pageNumber}:`, error);
                     }
                 }
             }
@@ -266,42 +315,17 @@
 
                 // Log de debug para multi-target
                 console.log('=== TESTE MULTI-TARGET ===');
-                console.log('Arquivo: ./src/files/targets.mind');
+                console.log('Arquivo: targets.mind');
                 console.log('Targets configurados: 2');
                 console.log('Target 0: exp01 -> Marcador 1');
                 console.log('Target 1: exp02 -> Marcador 2');
 
-                // Adiciona eventos de detecção de targets
-                for (let i = 1; i <= 2; i++) {
-                    const marker = document.getElementById(`marker-${i}`);
-
-                    marker.addEventListener('targetFound', function() {
-                        console.log(`✅ Target ${i} ENCONTRADO!`);
-                    });
-
-                    marker.addEventListener('targetLost', function() {
-                        console.log(`❌ Target ${i} PERDIDO`);
-                    });
-                }
-
                 // Também adiciona ao body para garantir
                 document.body.addEventListener('click', function(e) {
-                    console.log('Click no body detectado', e.target);
                     // Tenta identificar qual marcador foi clicado
                     const target = e.target.closest('[id^="marker-"]');
                     if (target) {
                         const pageNumber = parseInt(target.id.split('-')[1]);
-                        console.log('Click processado para marcador:', pageNumber);
-                        handleARClick(pageNumber);
-                    }
-                });
-
-                document.body.addEventListener('touchstart', function(e) {
-                    console.log('Touch no body detectado', e.target);
-                    const target = e.target.closest('[id^="marker-"]');
-                    if (target) {
-                        const pageNumber = parseInt(target.id.split('-')[1]);
-                        console.log('Touch processado para marcador:', pageNumber);
                         handleARClick(pageNumber);
                     }
                 });
