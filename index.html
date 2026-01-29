@@ -175,12 +175,16 @@
         // Controle de reprodução de vídeo para cada página
         const videoStates = {};
 
+        // Rastreia quais targets estão visíveis no momento
+        const visibleTargets = {};
+
         // Inicializa estados dos vídeos (TESTE: apenas 2)
         for (let i = 1; i <= 2; i++) {
             videoStates[i] = {
                 isPlaying: false,
                 initialized: false
             };
+            visibleTargets[i] = false;
         }
 
         // Função para lidar com cliques nos elementos AR - OTIMIZADA PARA iOS
@@ -272,40 +276,51 @@
                 console.log('Target 0: exp01 -> Marcador 1');
                 console.log('Target 1: exp02 -> Marcador 2');
 
-                // Adiciona eventos de detecção de targets para debug
+                // Adiciona eventos de detecção de targets
                 for (let i = 1; i <= 2; i++) {
                     const marker = document.getElementById(`marker-${i}`);
 
                     marker.addEventListener('targetFound', function() {
                         console.log(`✅ Target ${i} (exp0${i}) ENCONTRADO!`);
+                        visibleTargets[i] = true;
                     });
 
                     marker.addEventListener('targetLost', function() {
                         console.log(`❌ Target ${i} (exp0${i}) PERDIDO`);
+                        visibleTargets[i] = false;
                     });
                 }
 
-                // Também adiciona ao body para garantir (fallback)
+                // Click handler global - detecta qual target está visível
                 document.body.addEventListener('click', function(e) {
-                    console.log('Click detectado no body', e.target);
-                    // Tenta identificar qual marcador foi clicado
-                    const target = e.target.closest('[id^="marker-"]');
-                    if (target) {
-                        const pageNumber = parseInt(target.id.split('-')[1]);
-                        console.log('Processando click do marcador:', pageNumber);
-                        handleARClick(pageNumber);
+                    console.log('Click detectado no body');
+
+                    // Verifica qual target está visível
+                    for (let i = 1; i <= 2; i++) {
+                        if (visibleTargets[i]) {
+                            console.log(`👆 Click processado para target visível: ${i}`);
+                            handleARClick(i);
+                            return; // Processa apenas o primeiro visível
+                        }
                     }
+
+                    console.log('⚠️ Nenhum target visível no momento do click');
                 }, {passive: false});
 
-                // Touch para mobile
+                // Touch handler para mobile
                 document.body.addEventListener('touchstart', function(e) {
-                    console.log('Touch detectado no body', e.target);
-                    const target = e.target.closest('[id^="marker-"]');
-                    if (target) {
-                        const pageNumber = parseInt(target.id.split('-')[1]);
-                        console.log('Processando touch do marcador:', pageNumber);
-                        handleARClick(pageNumber);
+                    console.log('Touch detectado no body');
+
+                    // Verifica qual target está visível
+                    for (let i = 1; i <= 2; i++) {
+                        if (visibleTargets[i]) {
+                            console.log(`👆 Touch processado para target visível: ${i}`);
+                            handleARClick(i);
+                            return; // Processa apenas o primeiro visível
+                        }
                     }
+
+                    console.log('⚠️ Nenhum target visível no momento do touch');
                 }, {passive: false});
             }, 2000);
         });
