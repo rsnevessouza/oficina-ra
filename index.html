@@ -41,13 +41,47 @@
 
         <!-- Marcadores para cada página do livro -->
         <a-entity id="marker-1" mindar-image-target="targetIndex: 0">
-            <a-video id="videoId-1" src="#video-1" width="1.8" height="3.2" position="0 0.1 0" rotation="0 0 0" visible="false"></a-video>
-            <a-image id="thumbnailImg-1" src="#thumbnail-1" width="1.8" height="3.2" position="0 0.1 0" rotation="0 0 0" visible="true"></a-image>
+            <a-video
+                id="videoId-1"
+                src="#video-1"
+                width="1.8"
+                height="3.2"
+                position="0 0.1 0"
+                rotation="0 0 0"
+                visible="false"
+                material="shader: flat; side: double">
+            </a-video>
+            <a-image
+                id="thumbnailImg-1"
+                src="#thumbnail-1"
+                width="1.8"
+                height="3.2"
+                position="0 0.1 0"
+                rotation="0 0 0"
+                visible="true">
+            </a-image>
         </a-entity>
 
         <a-entity id="marker-2" mindar-image-target="targetIndex: 1">
-            <a-video id="videoId-2" src="#video-2" width="1.8" height="3.2" position="0 0.1 0" rotation="0 0 0" visible="false"></a-video>
-            <a-image id="thumbnailImg-2" src="#thumbnail-2" width="1.8" height="3.2" position="0 0.1 0" rotation="0 0 0" visible="true"></a-image>
+            <a-video
+                id="videoId-2"
+                src="#video-2"
+                width="1.8"
+                height="3.2"
+                position="0 0.1 0"
+                rotation="0 0 0"
+                visible="false"
+                material="shader: flat; side: double">
+            </a-video>
+            <a-image
+                id="thumbnailImg-2"
+                src="#thumbnail-2"
+                width="1.8"
+                height="3.2"
+                position="0 0.1 0"
+                rotation="0 0 0"
+                visible="true">
+            </a-image>
         </a-entity>
 
         <a-camera position="0 0 0" look-controls="enabled: false" wasd-controls="enabled: false;">
@@ -97,7 +131,9 @@
                     }
 
                     // Define o vídeo
-                    document.getElementById(`video-${i}`).src = dados.video;
+                    const videoElement = document.getElementById(`video-${i}`);
+                    videoElement.src = dados.video;
+                    console.log(`Vídeo ${i} configurado:`, dados.video);
                 }
 
                 // Aguarda o MindAR inicializar
@@ -192,37 +228,62 @@
             console.log(`🎬 Click no marcador ${pageNumber}`);
 
             const video = document.getElementById(`video-${pageNumber}`);
-            const videoId = document.getElementById(`videoId-${pageNumber}`);
-            const thumbnailImg = document.getElementById(`thumbnailImg-${pageNumber}`);
-            const spinner = document.getElementById("loadingSpinner");
+            const videoEl = document.getElementById(`videoId-${pageNumber}`);
+            const thumbnailEl = document.getElementById(`thumbnailImg-${pageNumber}`);
 
             const state = videoStates[pageNumber];
 
             if (!state.initialized) {
                 console.log(`Primeira inicialização do vídeo ${pageNumber}`);
 
-                // Esconde thumbnail e mostra vídeo IMEDIATAMENTE
-                thumbnailImg.setAttribute("visible", false);
-                videoId.setAttribute("visible", true);
+                // Esconde thumbnail
+                thumbnailEl.setAttribute("visible", "false");
+
+                // Aguarda um frame para garantir que o thumbnail foi escondido
+                await new Promise(resolve => setTimeout(resolve, 50));
+
+                // Mostra vídeo
+                videoEl.setAttribute("visible", "true");
+
+                console.log(`Estado do vídeo element:`, {
+                    src: video.src,
+                    readyState: video.readyState,
+                    paused: video.paused,
+                    width: video.videoWidth,
+                    height: video.videoHeight
+                });
 
                 try {
-                    // Para iOS: tenta reproduzir diretamente (requer interação do usuário)
-                    console.log(`Tentando reproduzir vídeo ${pageNumber}...`);
-                    const playPromise = video.play();
-
-                    if (playPromise !== undefined) {
-                        await playPromise;
-                        console.log(`✅ Vídeo ${pageNumber} reproduzindo!`);
-                        state.isPlaying = true;
-                        state.initialized = true;
+                    // Garante que o vídeo está carregado
+                    if (video.readyState < 2) {
+                        console.log(`Carregando vídeo ${pageNumber}...`);
+                        video.load();
+                        await new Promise((resolve, reject) => {
+                            video.addEventListener('loadeddata', resolve, {once: true});
+                            video.addEventListener('error', reject, {once: true});
+                            setTimeout(() => reject(new Error('Timeout ao carregar')), 10000);
+                        });
                     }
+
+                    // Reproduz o vídeo
+                    console.log(`Tentando reproduzir vídeo ${pageNumber}...`);
+                    await video.play();
+
+                    console.log(`✅ Vídeo ${pageNumber} reproduzindo!`, {
+                        paused: video.paused,
+                        currentTime: video.currentTime,
+                        duration: video.duration
+                    });
+
+                    state.isPlaying = true;
+                    state.initialized = true;
                 } catch (error) {
                     console.error(`❌ Erro ao reproduzir vídeo ${pageNumber}:`, error);
+                    alert(`Erro ao carregar vídeo ${pageNumber}: ${error.message}`);
 
-                    // Se falhar, mostra alerta e volta para thumbnail
-                    alert(`Erro ao carregar vídeo ${pageNumber}. Verifique o arquivo.`);
-                    thumbnailImg.setAttribute("visible", true);
-                    videoId.setAttribute("visible", false);
+                    // Volta para thumbnail
+                    thumbnailEl.setAttribute("visible", "true");
+                    videoEl.setAttribute("visible", "false");
                 }
             } else {
                 // Toggle play/pause
