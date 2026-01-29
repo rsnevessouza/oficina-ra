@@ -30,7 +30,7 @@
 </head>
 <body>
     <div class="loading-spinner" id="loadingSpinner"></div>
-    <a-scene mindar-image="imageTargetSrc: ./src/files/all-targets.mind; maxTrack: 10" color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false" id="arScene">
+    <a-scene mindar-image="imageTargetSrc: ./targets.mind; maxTrack: 2" color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false" id="arScene">
         <a-assets>
             <video id="video-1" playsinline></video>
             <video id="video-2" playsinline></video>
@@ -112,7 +112,7 @@
     </a-scene>
 
     <script>
-        // Mapeamento dos arquivos para cada página
+        // Mapeamento dos arquivos para cada página (TESTE: apenas 2 targets)
         const arquivos = {
             1: {
                 video: "./src/files/video1.mp4",
@@ -121,38 +121,6 @@
             2: {
                 video: "./src/files/video2.mp4",
                 thumb: "./src/files/thumb2.jpg"
-            },
-            3: {
-                video: "./src/files/video3.mp4",
-                thumb: "./src/files/thumb3.jpg"
-            },
-            4: {
-                video: "./src/files/video4.mp4",
-                thumb: "./src/files/thumb4.jpg"
-            },
-            5: {
-                video: "./src/files/video5.mp4",
-                thumb: "./src/files/thumb5.jpg"
-            },
-            6: {
-                video: "./src/files/video6.mp4",
-                thumb: "./src/files/thumb6.jpg"
-            },
-            7: {
-                video: "./src/files/video7.mp4",
-                thumb: "./src/files/thumb7.jpg"
-            },
-            8: {
-                video: "./src/files/video8.mp4",
-                thumb: "./src/files/thumb8.jpg"
-            },
-            9: {
-                video: "./src/files/video9.mp4",
-                thumb: "./src/files/thumb9.jpg"
-            },
-            10: {
-                video: "./src/files/video10.mp4",
-                thumb: "./src/files/thumb10.jpg"
             }
         };
 
@@ -172,10 +140,10 @@
             spinner.style.display = "block";
             
             try {
-                // Carrega todos os vídeos e thumbnails
-                for (let i = 1; i <= 10; i++) {
+                // Carrega apenas os 2 primeiros vídeos e thumbnails (TESTE)
+                for (let i = 1; i <= 2; i++) {
                     const dados = arquivos[i];
-                    
+
                     // Verifica se thumbnail existe
                     const thumbExists = await checkAssetExists(dados.thumb);
                     if (thumbExists) {
@@ -252,8 +220,8 @@
         // Controle de reprodução de vídeo para cada página
         const videoStates = {};
         
-        // Inicializa estados dos vídeos
-        for (let i = 1; i <= 10; i++) {
+        // Inicializa estados dos vídeos (TESTE: apenas 2)
+        for (let i = 1; i <= 2; i++) {
             videoStates[i] = {
                 isPlaying: false,
                 initialized: false
@@ -323,27 +291,34 @@
         // Adiciona eventos de clique aos elementos AR
         document.addEventListener('DOMContentLoaded', function() {
             setTimeout(() => {
-                // Adiciona eventos para cada marcador
-                for (let i = 1; i <= 10; i++) {
+                // Adiciona eventos para cada marcador (TESTE: apenas 2)
+                for (let i = 1; i <= 2; i++) {
                     const marker = document.getElementById(`marker-${i}`);
                     const thumbnailImg = document.getElementById(`thumbnailImg-${i}`);
                     const videoId = document.getElementById(`videoId-${i}`);
-                    
+
                     if (marker) {
                         marker.addEventListener('click', () => handleARClick(i));
                         marker.addEventListener('touchstart', () => handleARClick(i));
                     }
-                    
+
                     if (thumbnailImg) {
                         thumbnailImg.addEventListener('click', () => handleARClick(i));
                         thumbnailImg.addEventListener('touchstart', () => handleARClick(i));
                     }
-                    
+
                     if (videoId) {
                         videoId.addEventListener('click', () => handleARClick(i));
                         videoId.addEventListener('touchstart', () => handleARClick(i));
                     }
                 }
+
+                // Log de debug para multi-target
+                console.log('=== TESTE MULTI-TARGET ===');
+                console.log('Arquivo: targets.mind');
+                console.log('Targets configurados: 2');
+                console.log('Target 0: exp01 -> Marcador 1');
+                console.log('Target 1: exp02 -> Marcador 2');
                 
                 // Também adiciona ao body para garantir
                 document.body.addEventListener('click', function(e) {
