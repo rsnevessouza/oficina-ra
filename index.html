@@ -32,11 +32,11 @@
     <div class="loading-spinner" id="loadingSpinner"></div>
     <a-scene mindar-image="imageTargetSrc: ./src/files/targets.mind; maxTrack: 2" color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false" id="arScene">
         <a-assets>
-            <video id="video-1" playsinline></video>
-            <video id="video-2" playsinline></video>
+            <video id="video-1" playsinline webkit-playsinline crossorigin="anonymous"></video>
+            <video id="video-2" playsinline webkit-playsinline crossorigin="anonymous"></video>
 
-            <img id="thumbnail-1">
-            <img id="thumbnail-2">
+            <img id="thumbnail-1" crossorigin="anonymous">
+            <img id="thumbnail-2" crossorigin="anonymous">
         </a-assets>
 
         <!-- Marcadores para cada página do livro -->
@@ -103,8 +103,17 @@
                 // Aguarda o MindAR inicializar
                 const scene = document.getElementById("arScene");
                 scene.addEventListener('renderstart', function() {
-                    spinner.style.display = "none";
+                    console.log('MindAR renderizado!');
+                    setTimeout(() => {
+                        spinner.style.display = "none";
+                    }, 500);
                 });
+
+                // Timeout de segurança para remover spinner
+                setTimeout(() => {
+                    spinner.style.display = "none";
+                    console.log('Spinner removido por timeout');
+                }, 5000);
 
             } catch (error) {
                 console.error("Erro ao carregar assets:", error);
@@ -138,9 +147,11 @@
             const isSlowConnection = connection && (connection.effectiveType === 'slow-2g' || connection.effectiveType === '2g');
 
             if (!isSlowConnection) {
-                // Em conexões boas, preload o vídeo silenciosamente
-                const video = document.getElementById("video");
-                video.preload = "metadata";
+                // Em conexões boas, preload os vídeos silenciosamente
+                for (let i = 1; i <= 2; i++) {
+                    const video = document.getElementById(`video-${i}`);
+                    if (video) video.preload = "metadata";
+                }
             }
 
             // Configurações específicas para Android Chrome
@@ -172,8 +183,10 @@
             };
         }
 
-        // Função para lidar com cliques nos elementos AR
+        // Função para lidar com cliques nos elementos AR - OTIMIZADA PARA iOS
         async function handleARClick(pageNumber) {
+            console.log(`🎬 Click no marcador ${pageNumber}`);
+
             const video = document.getElementById(`video-${pageNumber}`);
             const videoId = document.getElementById(`videoId-${pageNumber}`);
             const thumbnailImg = document.getElementById(`thumbnailImg-${pageNumber}`);
@@ -182,51 +195,46 @@
             const state = videoStates[pageNumber];
 
             if (!state.initialized) {
-                // Primeira execução: mostra spinner e carrega vídeo
-                spinner.style.display = "block";
+                console.log(`Primeira inicialização do vídeo ${pageNumber}`);
+
+                // Esconde thumbnail e mostra vídeo IMEDIATAMENTE
                 thumbnailImg.setAttribute("visible", false);
                 videoId.setAttribute("visible", true);
 
                 try {
-                    // Aguarda o vídeo carregar completamente antes de reproduzir
-                    video.load();
+                    // Para iOS: tenta reproduzir diretamente (requer interação do usuário)
+                    console.log(`Tentando reproduzir vídeo ${pageNumber}...`);
+                    const playPromise = video.play();
 
-                    // Timeout para evitar loading infinito
-                    const loadTimeout = setTimeout(() => {
-                        spinner.style.display = "none";
-                        console.warn(`Timeout no carregamento do vídeo ${pageNumber}`);
-                    }, 15000);
-
-                    // Aguarda o vídeo estar pronto
-                    await new Promise((resolve, reject) => {
-                        video.addEventListener('loadedmetadata', resolve, {once: true});
-                        video.addEventListener('error', reject, {once: true});
-                    });
-
-                    clearTimeout(loadTimeout);
-                    spinner.style.display = "none";
-
-                    await video.play();
-                    state.isPlaying = true;
-                    state.initialized = true;
+                    if (playPromise !== undefined) {
+                        await playPromise;
+                        console.log(`✅ Vídeo ${pageNumber} reproduzindo!`);
+                        state.isPlaying = true;
+                        state.initialized = true;
+                    }
                 } catch (error) {
-                    spinner.style.display = "none";
-                    console.error(`Erro ao carregar/reproduzir o vídeo ${pageNumber}:`, error);
-                    // Volta para thumbnail em caso de erro
+                    console.error(`❌ Erro ao reproduzir vídeo ${pageNumber}:`, error);
+
+                    // Se falhar, mostra alerta e volta para thumbnail
+                    alert(`Erro ao carregar vídeo ${pageNumber}. Verifique o arquivo.`);
                     thumbnailImg.setAttribute("visible", true);
                     videoId.setAttribute("visible", false);
                 }
             } else {
-                // Execuções subsequentes: toggle play/pause
+                // Toggle play/pause
+                console.log(`Toggle play/pause do vídeo ${pageNumber}`);
+
                 if (state.isPlaying) {
                     video.pause();
                     state.isPlaying = false;
+                    console.log(`⏸️ Vídeo ${pageNumber} pausado`);
                 } else {
                     try {
                         await video.play();
                         state.isPlaying = true;
+                        console.log(`▶️ Vídeo ${pageNumber} retomado`);
                     } catch (error) {
-                        console.error(`Erro ao reproduzir o vídeo ${pageNumber}:`, error);
+                        console.error(`❌ Erro ao retomar vídeo ${pageNumber}:`, error);
                     }
                 }
             }
@@ -259,20 +267,46 @@
 
                 // Log de debug para multi-target
                 console.log('=== TESTE MULTI-TARGET ===');
-                console.log('Arquivo: targets.mind');
+                console.log('Arquivo: ./src/files/targets.mind');
                 console.log('Targets configurados: 2');
                 console.log('Target 0: exp01 -> Marcador 1');
                 console.log('Target 1: exp02 -> Marcador 2');
 
-                // Também adiciona ao body para garantir
+                // Adiciona eventos de detecção de targets para debug
+                for (let i = 1; i <= 2; i++) {
+                    const marker = document.getElementById(`marker-${i}`);
+
+                    marker.addEventListener('targetFound', function() {
+                        console.log(`✅ Target ${i} (exp0${i}) ENCONTRADO!`);
+                    });
+
+                    marker.addEventListener('targetLost', function() {
+                        console.log(`❌ Target ${i} (exp0${i}) PERDIDO`);
+                    });
+                }
+
+                // Também adiciona ao body para garantir (fallback)
                 document.body.addEventListener('click', function(e) {
+                    console.log('Click detectado no body', e.target);
                     // Tenta identificar qual marcador foi clicado
                     const target = e.target.closest('[id^="marker-"]');
                     if (target) {
                         const pageNumber = parseInt(target.id.split('-')[1]);
+                        console.log('Processando click do marcador:', pageNumber);
                         handleARClick(pageNumber);
                     }
-                });
+                }, {passive: false});
+
+                // Touch para mobile
+                document.body.addEventListener('touchstart', function(e) {
+                    console.log('Touch detectado no body', e.target);
+                    const target = e.target.closest('[id^="marker-"]');
+                    if (target) {
+                        const pageNumber = parseInt(target.id.split('-')[1]);
+                        console.log('Processando touch do marcador:', pageNumber);
+                        handleARClick(pageNumber);
+                    }
+                }, {passive: false});
             }, 2000);
         });
     </script>
