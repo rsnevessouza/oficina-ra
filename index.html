@@ -30,7 +30,7 @@
 </head>
 <body>
     <div class="loading-spinner" id="loadingSpinner"></div>
-    <a-scene mindar-image="imageTargetSrc: ./targets.mind; maxTrack: 2" color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false" id="arScene">
+    <a-scene mindar-image="imageTargetSrc: ./src/files/targets.mind; maxTrack: 2" color-space="sRGB" renderer="colorManagement: true, physicallyCorrectLights" vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false" id="arScene">
         <a-assets>
             <video id="video-1" playsinline></video>
             <video id="video-2" playsinline></video>
@@ -315,7 +315,7 @@
 
                 // Log de debug para multi-target
                 console.log('=== TESTE MULTI-TARGET ===');
-                console.log('Arquivo: targets.mind');
+                console.log('Arquivo: ./src/files/targets.mind');
                 console.log('Targets configurados: 2');
                 console.log('Target 0: exp01 -> Marcador 1');
                 console.log('Target 1: exp02 -> Marcador 2');
