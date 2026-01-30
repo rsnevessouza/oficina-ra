@@ -45,8 +45,8 @@
                 preload="auto">
             </video>
 
-            <img id="thumbnail-1">
-            <img id="thumbnail-2">
+            <img id="thumbnail-1" crossorigin="anonymous">
+            <img id="thumbnail-2" crossorigin="anonymous">
         </a-assets>
 
         <!-- Marcadores para cada página do livro -->
@@ -67,7 +67,8 @@
                 height="3.2"
                 position="0 0.1 0"
                 rotation="0 0 0"
-                visible="true">
+                visible="true"
+                material="shader: flat">
             </a-image>
         </a-entity>
 
@@ -88,7 +89,8 @@
                 height="3.2"
                 position="0 0.1 0"
                 rotation="0 0 0"
-                visible="true">
+                visible="true"
+                material="shader: flat">
             </a-image>
         </a-entity>
 
@@ -130,10 +132,14 @@
                 for (let i = 1; i <= 2; i++) {
                     const dados = arquivos[i];
 
-                    // Verifica se thumbnail existe
+                    // Carrega thumbnail com cache-busting para evitar problemas de cache
                     const thumbExists = await checkAssetExists(dados.thumb);
                     if (thumbExists) {
-                        document.getElementById(`thumbnail-${i}`).src = dados.thumb;
+                        const thumbnailElement = document.getElementById(`thumbnail-${i}`);
+                        // Adiciona timestamp para evitar cache
+                        const cacheBuster = `?v=${Date.now()}`;
+                        thumbnailElement.src = dados.thumb + cacheBuster;
+                        console.log(`Thumbnail ${i} carregado:`, dados.thumb);
                     } else {
                         console.warn(`Thumbnail ${i} não encontrada:`, dados.thumb);
                     }
@@ -411,6 +417,11 @@
                     marker.addEventListener('targetFound', function() {
                         console.log(`✅ Target ${i} (exp0${i}) ENCONTRADO!`);
                         visibleTargets[i] = true;
+
+                        // Debug: verifica qual thumbnail está sendo exibido
+                        const thumbnailEl = document.getElementById(`thumbnailImg-${i}`);
+                        const thumbSrc = document.getElementById(`thumbnail-${i}`).src;
+                        console.log(`Thumbnail do marcador ${i}:`, thumbSrc);
                     });
 
                     marker.addEventListener('targetLost', function() {
