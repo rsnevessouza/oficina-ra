@@ -44,9 +44,6 @@
                 webkit-playsinline
                 preload="auto">
             </video>
-
-            <img id="thumbnail-1" crossorigin="anonymous">
-            <img id="thumbnail-2" crossorigin="anonymous">
         </a-assets>
 
         <!-- Marcadores para cada página do livro -->
@@ -60,16 +57,14 @@
                 visible="false"
                 material="src: #video-1; shader: flat; side: double">
             </a-plane>
-            <a-image
+            <a-plane
                 id="thumbnailImg-1"
-                src="#thumbnail-1"
                 width="1.8"
                 height="3.2"
                 position="0 0.1 0"
                 rotation="0 0 0"
-                visible="true"
-                material="shader: flat">
-            </a-image>
+                visible="true">
+            </a-plane>
         </a-entity>
 
         <a-entity id="marker-2" mindar-image-target="targetIndex: 1">
@@ -82,16 +77,14 @@
                 visible="false"
                 material="src: #video-2; shader: flat; side: double">
             </a-plane>
-            <a-image
+            <a-plane
                 id="thumbnailImg-2"
-                src="#thumbnail-2"
                 width="1.8"
                 height="3.2"
                 position="0 0.1 0"
                 rotation="0 0 0"
-                visible="true"
-                material="shader: flat">
-            </a-image>
+                visible="true">
+            </a-plane>
         </a-entity>
 
         <a-camera position="0 0 0" look-controls="enabled: false" wasd-controls="enabled: false;">
@@ -132,14 +125,19 @@
                 for (let i = 1; i <= 2; i++) {
                     const dados = arquivos[i];
 
-                    // Carrega thumbnail com cache-busting para evitar problemas de cache
+                    // Carrega thumbnail diretamente no material do a-plane (evita compartilhamento no iOS)
                     const thumbExists = await checkAssetExists(dados.thumb);
                     if (thumbExists) {
-                        const thumbnailElement = document.getElementById(`thumbnail-${i}`);
-                        // Adiciona timestamp para evitar cache
-                        const cacheBuster = `?v=${Date.now()}`;
-                        thumbnailElement.src = dados.thumb + cacheBuster;
-                        console.log(`Thumbnail ${i} carregado:`, dados.thumb);
+                        const thumbnailPlane = document.getElementById(`thumbnailImg-${i}`);
+
+                        // Define o material diretamente com o src da imagem (sem usar asset)
+                        thumbnailPlane.setAttribute('material', {
+                            src: dados.thumb,
+                            shader: 'flat',
+                            transparent: false
+                        });
+
+                        console.log(`Thumbnail ${i} carregado diretamente no material:`, dados.thumb);
                     } else {
                         console.warn(`Thumbnail ${i} não encontrada:`, dados.thumb);
                     }
@@ -419,9 +417,9 @@
                         visibleTargets[i] = true;
 
                         // Debug: verifica qual thumbnail está sendo exibido
-                        const thumbnailEl = document.getElementById(`thumbnailImg-${i}`);
-                        const thumbSrc = document.getElementById(`thumbnail-${i}`).src;
-                        console.log(`Thumbnail do marcador ${i}:`, thumbSrc);
+                        const thumbnailPlane = document.getElementById(`thumbnailImg-${i}`);
+                        const material = thumbnailPlane.getAttribute('material');
+                        console.log(`Thumbnail do marcador ${i}:`, material.src);
                     });
 
                     marker.addEventListener('targetLost', function() {
