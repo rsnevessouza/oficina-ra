@@ -93,7 +93,7 @@
     </a-scene>
 
     <script>
-        // Mapeamento dos arquivos para cada página (TESTE: apenas 2 targets)
+        // Mapeamento dos arquivos para cada página
         const arquivos = {
             1: {
                 video: "./src/files/video1.mp4",
@@ -121,42 +121,31 @@
             spinner.style.display = "block";
 
             try {
-                // Carrega apenas os 2 primeiros vídeos e thumbnails (TESTE)
+                // Carrega vídeos e thumbnails
                 for (let i = 1; i <= 2; i++) {
                     const dados = arquivos[i];
 
-                    // Carrega thumbnail diretamente no material do a-plane (evita compartilhamento no iOS)
+                    // Carrega thumbnail diretamente no material do a-plane
                     const thumbExists = await checkAssetExists(dados.thumb);
                     if (thumbExists) {
                         const thumbnailPlane = document.getElementById(`thumbnailImg-${i}`);
-
-                        // Define o material diretamente com o src da imagem (sem usar asset)
                         thumbnailPlane.setAttribute('material', {
                             src: dados.thumb,
                             shader: 'flat',
                             transparent: false
                         });
-
-                        console.log(`Thumbnail ${i} carregado diretamente no material:`, dados.thumb);
-                    } else {
-                        console.warn(`Thumbnail ${i} não encontrada:`, dados.thumb);
                     }
 
                     // Define o vídeo
                     const videoElement = document.getElementById(`video-${i}`);
                     videoElement.src = dados.video;
-
-                    // Garante que o vídeo não está mudo e volume está no máximo
                     videoElement.muted = false;
                     videoElement.volume = 1.0;
-
-                    console.log(`Vídeo ${i} configurado:`, dados.video, `Volume: ${videoElement.volume}, Muted: ${videoElement.muted}`);
                 }
 
                 // Aguarda o MindAR inicializar
                 const scene = document.getElementById("arScene");
                 scene.addEventListener('renderstart', function() {
-                    console.log('MindAR renderizado!');
                     setTimeout(() => {
                         spinner.style.display = "none";
                     }, 500);
@@ -165,7 +154,6 @@
                 // Timeout de segurança para remover spinner
                 setTimeout(() => {
                     spinner.style.display = "none";
-                    console.log('Spinner removido por timeout');
                 }, 5000);
 
             } catch (error) {
@@ -183,9 +171,7 @@
         if (isMobile) {
             // Força orientação retrato no mobile
             if (screen.orientation && screen.orientation.lock) {
-                screen.orientation.lock('portrait').catch(error => {
-                    console.log('Não foi possível bloquear orientação:', error);
-                });
+                screen.orientation.lock('portrait').catch(() => {});
             }
 
             // Ajustes específicos para iOS
@@ -242,7 +228,7 @@
         // Rastreia quais targets estão visíveis no momento
         const visibleTargets = {};
 
-        // Inicializa estados dos vídeos (TESTE: apenas 2)
+        // Inicializa estados dos vídeos
         for (let i = 1; i <= 2; i++) {
             videoStates[i] = {
                 isPlaying: false,
@@ -251,48 +237,24 @@
             visibleTargets[i] = false;
         }
 
-        // Função para lidar com cliques nos elementos AR - OTIMIZADA PARA iOS
+        // Função para lidar com cliques nos elementos AR
         async function handleARClick(pageNumber) {
-            console.log(`🎬 Click no marcador ${pageNumber}`);
-
             const video = document.getElementById(`video-${pageNumber}`);
             const videoEl = document.getElementById(`videoId-${pageNumber}`);
             const thumbnailEl = document.getElementById(`thumbnailImg-${pageNumber}`);
-
             const state = videoStates[pageNumber];
 
             if (!state.initialized) {
-                console.log(`Primeira inicialização do vídeo ${pageNumber}`);
-
-                // Esconde thumbnail
                 thumbnailEl.setAttribute("visible", "false");
-
-                // Aguarda um frame para garantir que o thumbnail foi escondido
                 await new Promise(resolve => setTimeout(resolve, 50));
-
-                // Mostra vídeo
                 videoEl.setAttribute("visible", "true");
-
-                console.log(`Estado do vídeo element:`, {
-                    src: video.src,
-                    readyState: video.readyState,
-                    paused: video.paused,
-                    width: video.videoWidth,
-                    height: video.videoHeight
-                });
 
                 try {
                     // Força recriação da texture no iOS
                     const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
                     if (isIOS) {
-                        console.log('iOS detectado - aplicando correções...');
-
-                        // Remove e reaplica o material para forçar refresh
-                        const currentMaterial = videoEl.getAttribute('material');
                         videoEl.removeAttribute('material');
-
                         await new Promise(resolve => setTimeout(resolve, 100));
-
                         videoEl.setAttribute('material', {
                             src: `#video-${pageNumber}`,
                             shader: 'flat',
@@ -302,7 +264,6 @@
 
                     // Garante que o vídeo está carregado
                     if (video.readyState < 2) {
-                        console.log(`Carregando vídeo ${pageNumber}...`);
                         video.load();
                         await new Promise((resolve, reject) => {
                             video.addEventListener('loadeddata', resolve, {once: true});
@@ -311,31 +272,14 @@
                         });
                     }
 
-                    console.log(`Vídeo ${pageNumber} carregado. Dimensões: ${video.videoWidth}x${video.videoHeight}`);
-
-                    // Garante que o áudio está habilitado (CRÍTICO para iOS)
+                    // Garante que o áudio está habilitado
                     video.muted = false;
                     video.volume = 1.0;
 
-                    console.log(`Configuração de áudio: Volume=${video.volume}, Muted=${video.muted}`);
-
-                    // Reproduz o vídeo
-                    console.log(`Tentando reproduzir vídeo ${pageNumber}...`);
                     await video.play();
 
-                    console.log(`✅ Vídeo ${pageNumber} reproduzindo!`, {
-                        paused: video.paused,
-                        currentTime: video.currentTime,
-                        duration: video.duration,
-                        videoWidth: video.videoWidth,
-                        videoHeight: video.videoHeight,
-                        volume: video.volume,
-                        muted: video.muted
-                    });
-
-                    // Verificação adicional para iOS - força unmute novamente após play
+                    // Verificação adicional para iOS
                     if (video.muted) {
-                        console.warn(`⚠️ Vídeo ${pageNumber} ficou mudo após play, corrigindo...`);
                         video.muted = false;
                         video.volume = 1.0;
                     }
@@ -343,34 +287,21 @@
                     state.isPlaying = true;
                     state.initialized = true;
                 } catch (error) {
-                    console.error(`❌ Erro ao reproduzir vídeo ${pageNumber}:`, error);
-                    console.error('Detalhes do vídeo:', {
-                        src: video.src,
-                        readyState: video.readyState,
-                        networkState: video.networkState,
-                        error: video.error
-                    });
                     alert(`Erro ao carregar vídeo ${pageNumber}: ${error.message}`);
-
-                    // Volta para thumbnail
                     thumbnailEl.setAttribute("visible", "true");
                     videoEl.setAttribute("visible", "false");
                 }
             } else {
                 // Toggle play/pause
-                console.log(`Toggle play/pause do vídeo ${pageNumber}`);
-
                 if (state.isPlaying) {
                     video.pause();
                     state.isPlaying = false;
-                    console.log(`⏸️ Vídeo ${pageNumber} pausado`);
                 } else {
                     try {
                         await video.play();
                         state.isPlaying = true;
-                        console.log(`▶️ Vídeo ${pageNumber} retomado`);
                     } catch (error) {
-                        console.error(`❌ Erro ao retomar vídeo ${pageNumber}:`, error);
+                        // Silencioso em produção
                     }
                 }
             }
@@ -379,85 +310,38 @@
         // Adiciona eventos de clique aos elementos AR
         document.addEventListener('DOMContentLoaded', function() {
             setTimeout(() => {
-                // Adiciona eventos para cada marcador (TESTE: apenas 2)
-                for (let i = 1; i <= 2; i++) {
-                    const marker = document.getElementById(`marker-${i}`);
-                    const thumbnailImg = document.getElementById(`thumbnailImg-${i}`);
-                    const videoId = document.getElementById(`videoId-${i}`);
-
-                    if (marker) {
-                        marker.addEventListener('click', () => handleARClick(i));
-                        marker.addEventListener('touchstart', () => handleARClick(i));
-                    }
-
-                    if (thumbnailImg) {
-                        thumbnailImg.addEventListener('click', () => handleARClick(i));
-                        thumbnailImg.addEventListener('touchstart', () => handleARClick(i));
-                    }
-
-                    if (videoId) {
-                        videoId.addEventListener('click', () => handleARClick(i));
-                        videoId.addEventListener('touchstart', () => handleARClick(i));
-                    }
-                }
-
-                // Log de debug para multi-target
-                console.log('=== TESTE MULTI-TARGET ===');
-                console.log('Arquivo: ./src/files/targets.mind');
-                console.log('Targets configurados: 2');
-                console.log('Target 0: exp01 -> Marcador 1');
-                console.log('Target 1: exp02 -> Marcador 2');
 
                 // Adiciona eventos de detecção de targets
                 for (let i = 1; i <= 2; i++) {
                     const marker = document.getElementById(`marker-${i}`);
 
                     marker.addEventListener('targetFound', function() {
-                        console.log(`✅ Target ${i} (exp0${i}) ENCONTRADO!`);
                         visibleTargets[i] = true;
-
-                        // Debug: verifica qual thumbnail está sendo exibido
-                        const thumbnailPlane = document.getElementById(`thumbnailImg-${i}`);
-                        const material = thumbnailPlane.getAttribute('material');
-                        console.log(`Thumbnail do marcador ${i}:`, material.src);
                     });
 
                     marker.addEventListener('targetLost', function() {
-                        console.log(`❌ Target ${i} (exp0${i}) PERDIDO`);
                         visibleTargets[i] = false;
                     });
                 }
 
-                // Click handler global - detecta qual target está visível
+                // Click handler global
                 document.body.addEventListener('click', function(e) {
-                    console.log('Click detectado no body');
-
-                    // Verifica qual target está visível
                     for (let i = 1; i <= 2; i++) {
                         if (visibleTargets[i]) {
-                            console.log(`👆 Click processado para target visível: ${i}`);
                             handleARClick(i);
-                            return; // Processa apenas o primeiro visível
+                            return;
                         }
                     }
-
-                    console.log('⚠️ Nenhum target visível no momento do click');
                 }, {passive: false});
 
                 // Touch handler para mobile
                 document.body.addEventListener('touchstart', function(e) {
-                    console.log('Touch detectado no body');
-
-                    // Verifica qual target está visível
                     for (let i = 1; i <= 2; i++) {
                         if (visibleTargets[i]) {
-                            console.log(`👆 Touch processado para target visível: ${i}`);
                             handleARClick(i);
-                            return; // Processa apenas o primeiro visível
+                            return;
                         }
                     }
-
-                    console.log('⚠️ Nenhum target visível no momento do touch');
                 }, {passive: false});
             }, 2000);
         });
