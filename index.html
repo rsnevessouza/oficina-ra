@@ -36,17 +36,13 @@
                 id="video-1"
                 playsinline
                 webkit-playsinline
-                preload="auto"
-                muted="false"
-                autoplay="false">
+                preload="auto">
             </video>
             <video
                 id="video-2"
                 playsinline
                 webkit-playsinline
-                preload="auto"
-                muted="false"
-                autoplay="false">
+                preload="auto">
             </video>
 
             <img id="thumbnail-1">
@@ -145,7 +141,12 @@
                     // Define o vídeo
                     const videoElement = document.getElementById(`video-${i}`);
                     videoElement.src = dados.video;
-                    console.log(`Vídeo ${i} configurado:`, dados.video);
+
+                    // Garante que o vídeo não está mudo e volume está no máximo
+                    videoElement.muted = false;
+                    videoElement.volume = 1.0;
+
+                    console.log(`Vídeo ${i} configurado:`, dados.video, `Volume: ${videoElement.volume}, Muted: ${videoElement.muted}`);
                 }
 
                 // Aguarda o MindAR inicializar
@@ -188,6 +189,17 @@
             if (isIOS) {
                 // Força contexto de interação para iOS
                 document.addEventListener('touchstart', function() {}, {passive: true});
+
+                // Garante que todos os vídeos tenham áudio habilitado no iOS
+                document.addEventListener('touchstart', function enableAudioOnIOS() {
+                    for (let i = 1; i <= 2; i++) {
+                        const video = document.getElementById(`video-${i}`);
+                        if (video) {
+                            video.muted = false;
+                            video.volume = 1.0;
+                        }
+                    }
+                }, {once: true, passive: true});
             }
 
             // Preload condicional baseado na conexão
@@ -297,6 +309,12 @@
 
                     console.log(`Vídeo ${pageNumber} carregado. Dimensões: ${video.videoWidth}x${video.videoHeight}`);
 
+                    // Garante que o áudio está habilitado (CRÍTICO para iOS)
+                    video.muted = false;
+                    video.volume = 1.0;
+
+                    console.log(`Configuração de áudio: Volume=${video.volume}, Muted=${video.muted}`);
+
                     // Reproduz o vídeo
                     console.log(`Tentando reproduzir vídeo ${pageNumber}...`);
                     await video.play();
@@ -306,8 +324,17 @@
                         currentTime: video.currentTime,
                         duration: video.duration,
                         videoWidth: video.videoWidth,
-                        videoHeight: video.videoHeight
+                        videoHeight: video.videoHeight,
+                        volume: video.volume,
+                        muted: video.muted
                     });
+
+                    // Verificação adicional para iOS - força unmute novamente após play
+                    if (video.muted) {
+                        console.warn(`⚠️ Vídeo ${pageNumber} ficou mudo após play, corrigindo...`);
+                        video.muted = false;
+                        video.volume = 1.0;
+                    }
 
                     state.isPlaying = true;
                     state.initialized = true;
